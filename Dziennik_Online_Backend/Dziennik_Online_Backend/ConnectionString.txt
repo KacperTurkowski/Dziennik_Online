@@ -1,0 +1,1 @@
+﻿Server=tcp:projectdb1.database.windows.net,1433;Initial Catalog=project_db;Persist Security Info=False;User ID=external_admin;Password=5AT2OUfQvBqerfRlu0ZY;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;
