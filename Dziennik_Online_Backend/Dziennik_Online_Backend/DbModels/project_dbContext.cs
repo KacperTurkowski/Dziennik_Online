@@ -16,11 +16,11 @@ namespace Dziennik_Online_Backend.DbModels
         {
         }
 
-        public virtual DbSet<Klasa> Klasas { get; set; } = null!;
-        public virtual DbSet<Ocena> Ocenas { get; set; } = null!;
-        public virtual DbSet<RodzajOceny> RodzajOcenies { get; set; } = null!;
-        public virtual DbSet<Użytkownicy> Użytkownicies { get; set; } = null!;
-        public virtual DbSet<Zajęcium> Zajęcia { get; set; } = null!;
+        public virtual DbSet<Class> Classes { get; set; } = null!;
+        public virtual DbSet<Grade> Grades { get; set; } = null!;
+        public virtual DbSet<GradeType> GradeTypes { get; set; } = null!;
+        public virtual DbSet<SchoolSubject> SchoolSubjects { get; set; } = null!;
+        public virtual DbSet<User> Users { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -33,85 +33,84 @@ namespace Dziennik_Online_Backend.DbModels
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Klasa>(entity =>
+            modelBuilder.Entity<Class>(entity =>
             {
-                entity.ToTable("Klasa");
+                entity.ToTable("Class");
 
-                entity.Property(e => e.Oddział).HasMaxLength(200);
+                entity.Property(e => e.Department).HasMaxLength(200);
             });
 
-            modelBuilder.Entity<Ocena>(entity =>
+            modelBuilder.Entity<Grade>(entity =>
             {
-                entity.ToTable("Ocena");
+                entity.ToTable("Grade");
 
                 entity.Property(e => e.Id).ValueGeneratedNever();
 
-                entity.Property(e => e.DataWystawienia).HasColumnType("datetime");
+                entity.Property(e => e.TimeStamp).HasColumnType("datetime");
 
-                entity.HasOne(d => d.OsobaOtrzymującaOcenę)
-                    .WithMany(p => p.Ocenas)
-                    .HasForeignKey(d => d.OsobaOtrzymującaOcenęId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Ocena_Użytkownicy");
-
-                entity.HasOne(d => d.RodzajOceny)
-                    .WithMany(p => p.Ocenas)
-                    .HasForeignKey(d => d.RodzajOcenyId)
+                entity.HasOne(d => d.GradeType)
+                    .WithMany(p => p.Grades)
+                    .HasForeignKey(d => d.GradeTypeId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Ocena_RodzajOceny");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.Grades)
+                    .HasForeignKey(d => d.UserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Ocena_Użytkownicy");
             });
 
-            modelBuilder.Entity<RodzajOceny>(entity =>
+            modelBuilder.Entity<GradeType>(entity =>
             {
-                entity.ToTable("RodzajOceny");
+                entity.ToTable("GradeType");
 
                 entity.Property(e => e.Id).ValueGeneratedNever();
 
-                entity.HasOne(d => d.Zajęcia)
-                    .WithMany(p => p.RodzajOcenies)
-                    .HasForeignKey(d => d.ZajęciaId)
+                entity.HasOne(d => d.SchoolSubject)
+                    .WithMany(p => p.GradeTypes)
+                    .HasForeignKey(d => d.SchoolSubjectId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_RodzajOceny_Zajęcia");
             });
 
-            modelBuilder.Entity<Użytkownicy>(entity =>
+            modelBuilder.Entity<SchoolSubject>(entity =>
             {
-                entity.HasKey(e => e.UżytkownikId)
-                    .HasName("dbo.Użytkownicy");
+                entity.ToTable("SchoolSubject");
 
-                entity.ToTable("Użytkownicy");
+                entity.Property(e => e.SchoolSubjectId).HasMaxLength(200);
+
+                entity.HasOne(d => d.Class)
+                    .WithMany(p => p.SchoolSubjects)
+                    .HasForeignKey(d => d.ClassId)
+                    .HasConstraintName("FK_Zajęcia _Klasa");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.SchoolSubjects)
+                    .HasForeignKey(d => d.UserId)
+                    .HasConstraintName("FK_Zajęcia _Użytkownicy");
+            });
+
+            modelBuilder.Entity<User>(entity =>
+            {
+                entity.ToTable("User");
 
                 entity.Property(e => e.Guid).HasColumnName("GUID");
 
-                entity.Property(e => e.Hasło).HasMaxLength(200);
-
-                entity.Property(e => e.Imię).HasMaxLength(200);
-
                 entity.Property(e => e.Login).HasMaxLength(200);
 
-                entity.Property(e => e.Nazwisko).HasMaxLength(200);
+                entity.Property(e => e.Name).HasMaxLength(200);
 
-                entity.Property(e => e.Uprawnienia).HasMaxLength(200);
+                entity.Property(e => e.Pass).HasMaxLength(200);
 
-                entity.HasOne(d => d.KlasaNavigation)
-                    .WithMany(p => p.Użytkownicies)
-                    .HasForeignKey(d => d.Klasa)
+                entity.Property(e => e.Permissions).HasMaxLength(200);
+
+                entity.Property(e => e.Surname).HasMaxLength(200);
+
+                entity.HasOne(d => d.Class)
+                    .WithMany(p => p.Users)
+                    .HasForeignKey(d => d.ClassId)
                     .HasConstraintName("FK_Użytkownicy_Klasa");
-            });
-
-            modelBuilder.Entity<Zajęcium>(entity =>
-            {
-                entity.Property(e => e.NazwaPrzedmiotu).HasMaxLength(200);
-
-                entity.HasOne(d => d.Klasa)
-                    .WithMany(p => p.Zajęcia)
-                    .HasForeignKey(d => d.KlasaId)
-                    .HasConstraintName("FK_Zajęcia _Klasa");
-
-                entity.HasOne(d => d.OsobaProwadzca)
-                    .WithMany(p => p.Zajęcia)
-                    .HasForeignKey(d => d.OsobaProwadzcaId)
-                    .HasConstraintName("FK_Zajęcia _Użytkownicy");
             });
 
             OnModelCreatingPartial(modelBuilder);
