@@ -11,16 +11,16 @@ public class HelloController : ControllerBase
     public string Get(string name) => $"Hello {name}";
 
     [HttpGet("classes")]
-    public List<Klasa> GetClasses()
+    public List<Class> GetClasses()
     {
         using var dbContext = new project_dbContext();
-        return dbContext.Klasas.ToList();
+        return dbContext.Classes.ToList();
     }
 
     [HttpGet("user")]
-    public U¿ytkownicy GetUser()
+    public User GetUser()
     {
         using var dbContext = new project_dbContext();
-        return dbContext.U¿ytkownicies.ToList().First();
+        return dbContext.Users.ToList().First();
     }
 }
