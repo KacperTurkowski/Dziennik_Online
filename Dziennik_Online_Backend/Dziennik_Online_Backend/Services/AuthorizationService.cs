@@ -14,11 +14,12 @@ namespace Dziennik_Online_Backend.Services
             _repository = repository;
         }
 
-        public AuthorizationInfo GetAuthorizationInfo(UserInfo userInfo)
+        public AuthorizationInfo? GetAuthorizationInfo(UserInfo userInfo)
         {
             var user = _repository.GetUser(userInfo.Login, userInfo.Password);
-            if (user == null) return null;
-            return new AuthorizationInfo(user.Name, user.Surname, RoleConverter.ConvertFromDbStringToRole(user.Permissions), user.Guid ?? throw new Exception("Guid cannot be null"));
+            if (user == null) 
+                return null;
+            return new AuthorizationInfo(user.Name, user.Surname, RoleConverter.ConvertFromDbStringToRole(user.Permissions), (Guid) user.Guid);
 
         }
     }

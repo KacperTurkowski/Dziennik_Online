@@ -11,15 +11,18 @@ public class AuthorizationController
 {
     private readonly IAuthorizationService _service;
 
-    public AuthorizationController()
+    public AuthorizationController(IAuthorizationService authorizationService)
     {
-        _service = new AuthorizationService(new AuthorizationRepository());
+        _service = authorizationService;
     }
 
     [HttpPost]
-    public AuthorizationInfo GetAuthorizationInfo([FromBody] UserInfo userInfo)
+    public IActionResult GetAuthorizationInfo([FromBody] UserInfo userInfo)
     {
-        return _service.GetAuthorizationInfo(userInfo);
+        var authorizationInfo = _service.GetAuthorizationInfo(userInfo);
+        if(authorizationInfo == null)
+            return new StatusCodeResult(401);
+        return new OkObjectResult(authorizationInfo);
     }
 }
 

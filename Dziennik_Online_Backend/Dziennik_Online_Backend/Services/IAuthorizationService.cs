@@ -4,6 +4,6 @@ namespace Dziennik_Online_Backend.Services
 {
     public interface IAuthorizationService
     {
-        AuthorizationInfo GetAuthorizationInfo(UserInfo userInfo);
+        AuthorizationInfo? GetAuthorizationInfo(UserInfo userInfo);
     }
 }
