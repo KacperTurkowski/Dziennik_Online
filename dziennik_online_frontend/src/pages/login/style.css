@@ -1,0 +1,45 @@
+.login-page {
+    background: #F2EBD5;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.login-page-container {
+    display: flex;
+    justify-content: center;
+}
+.login-form-card {
+    width: 50%;
+    padding: 50px 10px;
+    border: 0;
+    border-radius: 0;
+    border-right: 5px solid #D5D971;
+}
+.login-form-card .card-body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.login-form {
+    margin-top: 50px;
+    width: 70%;
+}
+.login-form .btn {
+    width: 100%;
+    margin-top: 10px;
+    background: #D5D971;
+    border: 0;
+    border-radius: 0;
+}
+.login-form .btn:hover {
+    background: #BBBF63C2;
+}
+.error-message {
+    color: #c20303;
+    font-weight: bold;
+}
+.error-input {
+    border: 2px solid #c20303;
+}
