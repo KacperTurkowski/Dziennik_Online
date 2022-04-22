@@ -1,15 +1,9 @@
-import React, { SyntheticEvent, useState } from 'react';
-import {
-    Container,
-    Card,
-    Form,
-    InputGroup,
-    FormControl,
-    FormLabel,
-    Button
-} from 'react-bootstrap';
-import './style.css';
-import ErrorMessage from './ErrorMessage';
+import './style/style.css';
+import React, {SyntheticEvent, useState} from 'react';
+import {Container, Card, Button} from 'react-bootstrap';
+import {IconNames} from '../../interfaces/IconNames';
+import ErrorMessage from './components/ErrorMessage';
+import FormInput from './components/FormInput';
 
 const Login = (): JSX.Element => {
     const [username, setUsername] = useState<string | null>('');
@@ -34,12 +28,6 @@ const Login = (): JSX.Element => {
         setPassword(value);
     }
 
-    const inputValidateMessage = (): JSX.Element => {
-        return (
-            <p className={'error-message'}>To pole nie może być puste.</p>
-        )
-    }
-
     return (
         <Container fluid={true} className={'login-page'}>
             <Container className={'login-page-container'}>
@@ -47,34 +35,22 @@ const Login = (): JSX.Element => {
                     <Card.Body>
                         <h4 className={'text-center'}>Logowanie</h4>
                         <div className={'login-form'}>
-                            <Form.Group className='mb-3' controlId='username'>
-                                <Form.Label>Nazwa użytkownika:</Form.Label>
-                                <InputGroup hasValidation>
-                                    <InputGroup.Text id="usernamePrepend">
-                                        <i className="bi bi-person-fill" />
-                                    </InputGroup.Text>
-                                    <Form.Control
-                                        type="text"
-                                        onBlur={handleUserName}
-                                        className={username === null ? 'error-input' : ''}
-                                    />
-                                </InputGroup>
-                                {username === null && inputValidateMessage()}
-                            </Form.Group>
-                            <Form.Group className='mb-3' controlId='password'>
-                                <Form.Label>Hasło:</Form.Label>
-                                <InputGroup hasValidation>
-                                    <InputGroup.Text id="passwordPrepend">
-                                        <i className="bi bi-lock-fill" />
-                                    </InputGroup.Text>
-                                    <Form.Control
-                                        type="password"
-                                        onBlur={handlePassword}
-                                        className={password === null ? 'error-input' : ''}
-                                    />
-                                </InputGroup>
-                                {password === null && inputValidateMessage()}
-                            </Form.Group>
+                            <FormInput
+                                id={'username'}
+                                label={'Nazwa użytkownika'}
+                                onBlurFn={handleUserName}
+                                type={'text'}
+                                validation={username === null}
+                                iconName={IconNames.Person}
+                            />
+                            <FormInput
+                                id={'password'}
+                                label={'Hasło'}
+                                onBlurFn={handlePassword}
+                                type={'password'}
+                                validation={password === null}
+                                iconName={IconNames.Lock}
+                            />
                             {showError && <ErrorMessage />}
                             <Button>Zaloguj</Button>
                         </div>
