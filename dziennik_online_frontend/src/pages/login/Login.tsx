@@ -1,6 +1,8 @@
 import './style/style.css';
-import React, {SyntheticEvent, useState} from 'react';
+import React, { SyntheticEvent, useEffect, useState } from 'react';
 import {Container, Card, Button} from 'react-bootstrap';
+import { loginFakeApi } from "../../api/authorization";
+import useAuth from "../../context/AuthContext/useAuth";
 import {IconNames} from '../../interfaces/IconNames';
 import ErrorMessage from './components/ErrorMessage';
 import FormInput from './components/FormInput';
@@ -9,23 +11,46 @@ const Login = (): JSX.Element => {
     const [username, setUsername] = useState<string | null>('');
     const [password, setPassword] = useState<string | null>('');
     const [showError, setShowError] = useState<boolean>(false);
+    const {onLogin} = useAuth();
+
+    useEffect(() => {
+        setShowError(false);
+    }, [username, password])
 
     const handleUserName = (event: SyntheticEvent) => {
         const value: string = (event.target as HTMLInputElement).value;
-        if (value === '') {
-            setUsername(null);
+
+        if (value !== '') {
+            setUsername(value);
             return;
         }
-        setUsername(value);
+
+        setUsername(null);
     }
 
     const handlePassword = (event: SyntheticEvent) => {
         const value: string = (event.target as HTMLInputElement).value;
-        if (value === '') {
-            setPassword(null);
+
+        if (value !== '') {
+            setPassword(value);
             return;
         }
-        setPassword(value);
+
+        setPassword(null);
+    }
+
+    const handleSubmit = async (event: SyntheticEvent) => {
+        event.preventDefault();
+
+        if ( !!username && !!password ) {
+            try {
+                const data = await loginFakeApi();
+                onLogin(data);
+            } catch (e) {
+                setShowError(true);
+            }
+
+        }
     }
 
     return (
@@ -52,7 +77,7 @@ const Login = (): JSX.Element => {
                                 iconName={IconNames.Lock}
                             />
                             {showError && <ErrorMessage />}
-                            <Button>Zaloguj</Button>
+                            <Button onClick={handleSubmit}>Zaloguj</Button>
                         </div>
                     </Card.Body>
                 </Card>
