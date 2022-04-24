@@ -22,15 +22,11 @@ const FormInput = ({label, id, type, validation, onBlurFn, iconName}: Props): JS
     return (
         <Form.Group className='mb-3' controlId={id}>
             <Form.Label>{label}:</Form.Label>
-            <InputGroup hasValidation>
+            <InputGroup>
                 <InputGroup.Text id={idPrepend}>
                     <i className={iconName} />
                 </InputGroup.Text>
-                <Form.Control
-                    type={type}
-                    onBlur={onBlurFn}
-                    className={validation ? 'error-input' : ''}
-                />
+                <Form.Control type={type} onBlur={onBlurFn} className={validation ? 'error-input' : ''} />
             </InputGroup>
             {validation && inputValidateMessage()}
         </Form.Group>

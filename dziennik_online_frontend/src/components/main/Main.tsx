@@ -1,6 +1,6 @@
 import useAuth from "../../context/AuthContext/useAuth";
 
-const Home = (): JSX.Element => {
+const Main = (): JSX.Element => {
     const {user, onLogout} = useAuth();
 
     return (
@@ -13,4 +13,4 @@ const Home = (): JSX.Element => {
     )
 }
 
-export default Home;
+export default Main;

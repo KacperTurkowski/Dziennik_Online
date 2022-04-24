@@ -11,3 +11,26 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+
+/*colors*/
+/* Color Theme Swatches in Hex */
+/*.Nymble-1-hex { color: #F277A4; }*/
+/*.Nymble-2-hex { color: #4129D9; }*/
+/*.Nymble-3-hex { color: #503FBF; }*/
+/*.Nymble-4-hex { color: #7162D9; }*/
+/*.Nymble-5-hex { color: #6CD9B1; }*/
+
+/*!* Color Theme Swatches in RGBA *!*/
+/*.Nymble-1-rgba { color: rgba(242, 118, 164, 1); }*/
+/*.Nymble-2-rgba { color: rgba(64, 41, 216, 1); }*/
+/*.Nymble-3-rgba { color: rgba(80, 63, 191, 1); }*/
+/*.Nymble-4-rgba { color: rgba(113, 97, 216, 1); }*/
+/*.Nymble-5-rgba { color: rgba(108, 216, 177, 1); }*/
+
+/*!* Color Theme Swatches in HSLA *!*/
+/*.Nymble-1-hsla { color: hsla(337, 82, 70, 1); }*/
+/*.Nymble-2-hsla { color: hsla(247, 69, 50, 1); }*/
+/*.Nymble-3-hsla { color: hsla(247, 50, 49, 1); }*/
+/*.Nymble-4-hsla { color: hsla(247, 60, 61, 1); }*/
+/*.Nymble-5-hsla { color: hsla(157, 58, 63, 1); }*/

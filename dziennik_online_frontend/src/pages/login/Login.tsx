@@ -1,7 +1,7 @@
 import './style/style.css';
 import React, { SyntheticEvent, useEffect, useState } from 'react';
 import {Container, Card, Button} from 'react-bootstrap';
-import { loginFakeApi } from "../../api/authorization";
+import { loginFakeApi } from "../../services/authorization";
 import useAuth from "../../context/AuthContext/useAuth";
 import {IconNames} from '../../interfaces/IconNames';
 import ErrorMessage from './components/ErrorMessage';
@@ -24,7 +24,6 @@ const Login = (): JSX.Element => {
             setUsername(value);
             return;
         }
-
         setUsername(null);
     }
 
@@ -35,21 +34,22 @@ const Login = (): JSX.Element => {
             setPassword(value);
             return;
         }
-
         setPassword(null);
     }
 
     const handleSubmit = async (event: SyntheticEvent) => {
         event.preventDefault();
 
-        if ( !!username && !!password ) {
+        if (!!username && !!password) {
             try {
                 const data = await loginFakeApi();
                 onLogin(data);
             } catch (e) {
                 setShowError(true);
             }
-
+        } else {
+            setUsername(null);
+            setPassword(null);
         }
     }
 

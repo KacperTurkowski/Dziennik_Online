@@ -4,8 +4,8 @@ import { UserInterface } from "../../interfaces/UserInterface";
 import AuthContext from "./AuthContext";
 
 const AuthProvider = ({children}: any) => {
-    const [user, setUser] = useState<UserInterface | null>(null);
     const navigate = useNavigate();
+    const [user, setUser] = useState<UserInterface | null>(null);
 
     useEffect(() => {
         if (user === null) {
@@ -18,28 +18,18 @@ const AuthProvider = ({children}: any) => {
 
         if (!!userFromStorage) {
             const userFromStorageParsed = JSON.parse(userFromStorage);
+            const {firstName, lastName, role, guid} = userFromStorageParsed;
 
-            setUser({
-                firstName: userFromStorageParsed['firstName'] as string,
-                lastName: userFromStorageParsed['lastName'] as string,
-                role: userFromStorageParsed['role'] as string,
-                guid: userFromStorageParsed['guid'] as string
-            } as UserInterface);
-
+            setUser({firstName, lastName, role, guid} as UserInterface);
             navigate('/');
         }
     }
 
     const handleLogin = async(userObject: any) => {
-        const user: UserInterface = {
-            firstName: userObject['firstName'] as string,
-            lastName: userObject['lastName'] as string,
-            role: userObject['role'] as string,
-            guid: userObject['guid'] as string
-        } as UserInterface;
+        const {firstName, lastName, role, guid} = userObject;
 
-        setUser(user);
-        localStorage.setItem('user', JSON.stringify(user));
+        setUser({firstName, lastName, role, guid} as UserInterface);
+        localStorage.setItem('user', JSON.stringify(userObject));
         navigate('/');
     }
 
