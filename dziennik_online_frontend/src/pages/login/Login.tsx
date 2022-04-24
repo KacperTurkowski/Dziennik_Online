@@ -1,6 +1,7 @@
 import './style/style.css';
 import React, { SyntheticEvent, useEffect, useState } from 'react';
 import {Container, Card, Button} from 'react-bootstrap';
+import { useNavigate } from "react-router-dom";
 import { loginFakeApi } from "../../services/authorization";
 import useAuth from "../../context/AuthContext/useAuth";
 import {IconNames} from '../../interfaces/IconNames';
@@ -11,7 +12,15 @@ const Login = (): JSX.Element => {
     const [username, setUsername] = useState<string | null>('');
     const [password, setPassword] = useState<string | null>('');
     const [showError, setShowError] = useState<boolean>(false);
-    const {onLogin} = useAuth();
+    const {user, onLogin} = useAuth();
+    const navigate = useNavigate()
+
+    useEffect(() => {
+       if (user !== null) {
+           navigate('/');
+       }
+    });
+
 
     useEffect(() => {
         setShowError(false);

@@ -7,22 +7,25 @@ const AuthProvider = ({children}: any) => {
     const navigate = useNavigate();
     const [user, setUser] = useState<UserInterface | null>(null);
 
-    useEffect(() => {
-        if (user === null) {
-            loadUserFromStorage();
-        }
-    });
-
-    const loadUserFromStorage = () => {
+    const getUserFromStorage = (): UserInterface | null => {
         const userFromStorage = localStorage.getItem('user');
 
         if (!!userFromStorage) {
             const userFromStorageParsed = JSON.parse(userFromStorage);
             const {firstName, lastName, role, guid} = userFromStorageParsed;
 
-            setUser({firstName, lastName, role, guid} as UserInterface);
-            navigate('/');
+            return {firstName, lastName, role, guid} as UserInterface;
         }
+
+        return null;
+    }
+
+    const getDefaultUser = () => {
+        if (user === null) {
+            return getUserFromStorage();
+        }
+
+        return user;
     }
 
     const handleLogin = async(userObject: any) => {
@@ -36,11 +39,12 @@ const AuthProvider = ({children}: any) => {
     const handleLogout =  async() => {
         setUser(null);
         localStorage.removeItem('user');
+        navigate('/login');
     }
 
     return (
         <AuthContext.Provider value={{
-            user: user,
+            user: getDefaultUser(),
             onLogin: handleLogin,
             onLogout: handleLogout
         }}>
