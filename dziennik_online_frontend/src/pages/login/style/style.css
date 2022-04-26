@@ -1,5 +1,6 @@
 .login-page {
-    background: #F2EBD5;
+    /*background: #F2EBD5;*/
+    background: #7162D9;
     width: 100vw;
     height: 100vh;
     display: flex;
@@ -11,11 +12,11 @@
     justify-content: center;
 }
 .login-form-card {
-    width: 50%;
+    width: 40%;
     padding: 50px 10px;
     border: 0;
     border-radius: 0;
-    border-right: 5px solid #D5D971;
+    border-right: 5px solid #503FBF;
 }
 .login-form-card .card-body {
     display: flex;
@@ -29,17 +30,16 @@
 .login-form .btn {
     width: 100%;
     margin-top: 10px;
-    background: #D5D971;
+    background: #7162D9;
     border: 0;
     border-radius: 0;
 }
 .login-form .btn:hover {
-    background: #BBBF63C2;
+    background: #564ba3;
 }
 .error-message {
     color: #c20303;
-    font-weight: bold;
 }
 .error-input {
-    border: 2px solid #c20303;
+    border: 1px solid #c20303;
 }
