@@ -8,14 +8,12 @@ namespace Dziennik_Online_Backend.DbModels
         public Class()
         {
             SchoolSubjects = new HashSet<SchoolSubject>();
-            Users = new HashSet<User>();
         }
 
         public int Id { get; set; }
-        public int? Year { get; set; }
-        public string? Department { get; set; }
+        public int Year { get; set; }
+        public string Department { get; set; } = null!;
 
         public virtual ICollection<SchoolSubject> SchoolSubjects { get; set; }
-        public virtual ICollection<User> Users { get; set; }
     }
 }

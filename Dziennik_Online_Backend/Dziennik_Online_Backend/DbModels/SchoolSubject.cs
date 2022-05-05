@@ -11,11 +11,11 @@ namespace Dziennik_Online_Backend.DbModels
         }
 
         public int Id { get; set; }
-        public string? SchoolSubjectId { get; set; }
-        public int? ClassId { get; set; }
+        public string SchoolSubjectName { get; set; } = null!;
+        public int ClassId { get; set; }
         public int? UserId { get; set; }
 
-        public virtual Class? Class { get; set; }
+        public virtual Class Class { get; set; } = null!;
         public virtual User? User { get; set; }
         public virtual ICollection<GradeType> GradeTypes { get; set; }
     }
