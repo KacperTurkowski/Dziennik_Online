@@ -1,12 +1,11 @@
 ﻿using Dziennik_Online_Backend.Models;
-using Dziennik_Online_Backend.Repositories;
 using Dziennik_Online_Backend.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Dziennik_Online_Backend.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("authorization")]
 public class AuthorizationController
 {
     private readonly IAuthorizationService _service;

@@ -12,15 +12,14 @@ namespace Dziennik_Online_Backend.DbModels
         }
 
         public int Id { get; set; }
-        public string? Login { get; set; }
-        public string? Pass { get; set; }
-        public string? Permissions { get; set; }
-        public string? Name { get; set; }
-        public string? Surname { get; set; }
-        public Guid? Guid { get; set; }
-        public int? ClassId { get; set; }
+        public string Login { get; set; } = null!;
+        public string Pass { get; set; } = null!;
+        public string Permissions { get; set; } = null!;
+        public string Name { get; set; } = null!;
+        public string Surname { get; set; } = null!;
+        public Guid Guid { get; set; }
+        public int ClassId { get; set; }
 
-        public virtual Class? Class { get; set; }
         public virtual ICollection<Grade> Grades { get; set; }
         public virtual ICollection<SchoolSubject> SchoolSubjects { get; set; }
     }

@@ -44,58 +44,59 @@ namespace Dziennik_Online_Backend.DbModels
             {
                 entity.ToTable("Grade");
 
-                entity.Property(e => e.Id).ValueGeneratedNever();
-
-                entity.Property(e => e.TimeStamp).HasColumnType("datetime");
+                entity.Property(e => e.TimeStamp)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
 
                 entity.HasOne(d => d.GradeType)
                     .WithMany(p => p.Grades)
                     .HasForeignKey(d => d.GradeTypeId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Ocena_RodzajOceny");
+                    .HasConstraintName("FK_Grade_GradeType");
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.Grades)
                     .HasForeignKey(d => d.UserId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Ocena_Użytkownicy");
+                    .HasConstraintName("FK_Grade_User");
             });
 
             modelBuilder.Entity<GradeType>(entity =>
             {
                 entity.ToTable("GradeType");
 
-                entity.Property(e => e.Id).ValueGeneratedNever();
-
                 entity.HasOne(d => d.SchoolSubject)
                     .WithMany(p => p.GradeTypes)
                     .HasForeignKey(d => d.SchoolSubjectId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_RodzajOceny_Zajęcia");
+                    .HasConstraintName("FK_GradeType_SchoolSubject");
             });
 
             modelBuilder.Entity<SchoolSubject>(entity =>
             {
                 entity.ToTable("SchoolSubject");
 
-                entity.Property(e => e.SchoolSubjectId).HasMaxLength(200);
+                entity.Property(e => e.SchoolSubjectName).HasMaxLength(200);
 
                 entity.HasOne(d => d.Class)
                     .WithMany(p => p.SchoolSubjects)
                     .HasForeignKey(d => d.ClassId)
-                    .HasConstraintName("FK_Zajęcia _Klasa");
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_SchoolSubject_Class");
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.SchoolSubjects)
                     .HasForeignKey(d => d.UserId)
-                    .HasConstraintName("FK_Zajęcia _Użytkownicy");
+                    .HasConstraintName("FK_SchoolSubject_User");
             });
 
             modelBuilder.Entity<User>(entity =>
             {
                 entity.ToTable("User");
 
-                entity.Property(e => e.Guid).HasColumnName("GUID");
+                entity.Property(e => e.Guid)
+                    .HasColumnName("GUID")
+                    .HasDefaultValueSql("(newid())");
 
                 entity.Property(e => e.Login).HasMaxLength(200);
 
@@ -106,11 +107,6 @@ namespace Dziennik_Online_Backend.DbModels
                 entity.Property(e => e.Permissions).HasMaxLength(200);
 
                 entity.Property(e => e.Surname).HasMaxLength(200);
-
-                entity.HasOne(d => d.Class)
-                    .WithMany(p => p.Users)
-                    .HasForeignKey(d => d.ClassId)
-                    .HasConstraintName("FK_Użytkownicy_Klasa");
             });
 
             OnModelCreatingPartial(modelBuilder);

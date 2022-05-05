@@ -7,7 +7,7 @@ namespace Dziennik_Online_Backend.DbModels
     {
         public int Id { get; set; }
         public int Value { get; set; }
-        public string? Commentary { get; set; }
+        public string Commentary { get; set; } = null!;
         public DateTime TimeStamp { get; set; }
         public int UserId { get; set; }
         public int GradeTypeId { get; set; }
