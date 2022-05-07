@@ -5,30 +5,42 @@
 }
 
 .nav-menu-list {
-    height: 100vh;
     margin-top: 20px;
     padding: 0;
     background-color: #503FBF;
-    color: whitesmoke;
-    font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
 
 .nav-menu-list .list-item {
     height: 60px;
     background-color: #503FBF;
-    list-style-type: none;
-    margin: 0;
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
 }
 
+.nav-menu-list .list-item.list-item-category {
+    height: auto;
+    flex-direction: column;
+    cursor: default;
+}
+
+.nav-menu-list .list-item.list-item-category .nav-menu-sublist {
+    width: 100%;
+}
+
+.nav-menu-list .list-item div {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 60px;
+}
+
 .nav-menu-list .list-item #active {
     background-color: rgb(21, 21, 42);
 }
 
-.nav-menu-list .list-item:hover {
+.nav-menu-list .list-item:not(.list-item-category):hover {
     cursor: pointer;
     background-color: #7162D9;
 }
