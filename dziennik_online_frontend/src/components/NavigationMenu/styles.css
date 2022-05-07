@@ -1,22 +1,21 @@
 .nav-menu {
-    width: 250px;
     height: 100vh;
-    background-color: rgb(31, 31, 62);
+    background-color: #503FBF;
+    color: #ffffff;
 }
 
 .nav-menu-list {
-    width: 250px;
     height: 100vh;
+    margin-top: 20px;
     padding: 0;
-    background-color: rgb(31, 31, 62);
-    color:whitesmoke ;
+    background-color: #503FBF;
+    color: whitesmoke;
     font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-    font-size: large;
 }
 
 .nav-menu-list .list-item {
     height: 60px;
-    background-color: rgb(31, 31, 62);
+    background-color: #503FBF;
     list-style-type: none;
     margin: 0;
     display: flex;
@@ -25,27 +24,35 @@
     align-items: center;
 }
 
-.nav-menu-list .list-item #active{
+.nav-menu-list .list-item #active {
     background-color: rgb(21, 21, 42);
 }
 
-.nav-menu-list .list-item:hover{
+.nav-menu-list .list-item:hover {
     cursor: pointer;
-    background-color: rgb(21, 21, 42);
+    background-color: #7162D9;
 }
 
 .list-item #icon {
     flex: 30%;
     display: grid;
     place-items: center;
+    margin: 0;
 }
 
 .list-item #title {
     flex: 70%;
+    margin: 0;
 }
 
-.main-column-styles{
+.main-column-styles {
     position: fixed;
     top: 0;
     left: 260px;
+}
+
+.logged-user {
+    text-align: center;
+    border-bottom: 1px solid #ffffff;
+    padding: 10px;
 }
