@@ -9,11 +9,14 @@ public static class ServiceExtensions
     {
         collection.AddSingleton<IAuthorizationRepository, AuthorizationRepository>();
         collection.AddSingleton<ITeacherStatisticsRepository, TeacherStatisticsRepository>();
+        collection.AddSingleton<ITeacherSubjectsRepository, TeacherSubjectsRepository>();
+
     }
 
     public static void RegisterServices(this IServiceCollection collection)
     {
         collection.AddSingleton<IAuthorizationService, AuthorizationService>();
         collection.AddSingleton<ITeacherStatisticsService, TeacherStatisticsService>();
+        collection.AddSingleton<ITeacherSubjectsService, TeacherSubjectsService>();
     }
 }
