@@ -4,14 +4,10 @@ import Main from "./components/main/Main";
 import AuthProvider from "./context/AuthContext/AuthProvider";
 import useAuth from "./context/AuthContext/useAuth";
 import Dashboard from "./pages/dashboard/Dashboard";
-import Grades from "./pages/grades/Grades";
 import Login from './pages/login/Login';
 import NoMatch from "./pages/nomatch/NoMatch";
-import TeachersList from './pages/teachersList/TeachersList';
-import SubjectsList from './pages/subjectsList/SubjectsList';
-import Settings from './pages/settings/Settings';
-import Announcements from './pages/announcements/Announcements';
-import Deadlines from './pages/deadlines/Deadlines';
+import Subject from "./pages/subjects/subjectPage/Subject";
+import SubjectsList from './pages/subjects/SubjectsList';
 
 const App = (): JSX.Element => {
 
@@ -28,12 +24,8 @@ const App = (): JSX.Element => {
             <Routes>
                 <Route path='/' element={<Authenticated />}>
                     <Route index element={<Dashboard />} />
-                    <Route path="oceny" element={<Grades />} />
                     <Route path="przedmioty" element={<SubjectsList />} />
-                    <Route path="nauczyciele" element={<TeachersList />} />
-                    <Route path="terminy" element={<Deadlines />} />
-                    <Route path="komunikaty" element={<Announcements />} />
-                    <Route path="ustawienia" element={<Settings />} />
+                    <Route path="przedmioty/:subject" element={<Subject />} />
                     <Route path="*" element={<NoMatch />} />
                 </Route>
                 <Route path="/login" element={<Login />} />
