@@ -7,10 +7,10 @@ interface Props {
     type: "text" | "password";
     validation: boolean;
     onBlurFn: FocusEventHandler;
-    iconName: string
+    icon: JSX.Element;
 }
 
-const FormInput = ({label, id, type, validation, onBlurFn, iconName}: Props): JSX.Element => {
+const FormInput = ({label, id, type, validation, onBlurFn, icon}: Props): JSX.Element => {
     const idPrepend: string = id + 'Prepend';
 
     const inputValidateMessage = (): JSX.Element => {
@@ -24,7 +24,7 @@ const FormInput = ({label, id, type, validation, onBlurFn, iconName}: Props): JS
             <Form.Label>{label}:</Form.Label>
             <InputGroup>
                 <InputGroup.Text id={idPrepend}>
-                    <i className={iconName} />
+                    {icon}
                 </InputGroup.Text>
                 <Form.Control type={type} onBlur={onBlurFn} className={validation ? 'error-input' : ''} />
             </InputGroup>

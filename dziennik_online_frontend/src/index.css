@@ -15,11 +15,11 @@ code {
 
 /*colors*/
 /* Color Theme Swatches in Hex */
-/*.Nymble-1-hex { color: #F277A4; }*/
-/*.Nymble-2-hex { color: #4129D9; }*/
-/*.Nymble-3-hex { color: #503FBF; }*/
-/*.Nymble-4-hex { color: #7162D9; }*/
-/*.Nymble-5-hex { color: #6CD9B1; }*/
+.Nymble-1-hex { color: #F277A4; }
+.Nymble-2-hex { color: #4129D9; }
+.Nymble-3-hex { color: #503FBF; }
+.Nymble-4-hex { color: #7162D9; }
+.Nymble-5-hex { color: #6CD9B1; }
 
 /*!* Color Theme Swatches in RGBA *!*/
 /*.Nymble-1-rgba { color: rgba(242, 118, 164, 1); }*/

@@ -1,10 +1,10 @@
 import './style/style.css';
 import React, { SyntheticEvent, useEffect, useState } from 'react';
 import {Container, Card, Button} from 'react-bootstrap';
+import * as Icon from 'react-bootstrap-icons';
 import { useNavigate } from "react-router-dom";
-import { loginFakeApi } from "../../services/authorization";
+import { loginApi, loginFakeApi } from "../../services/authorization";
 import useAuth from "../../context/AuthContext/useAuth";
-import {IconNames} from '../../interfaces/IconNames';
 import ErrorMessage from './components/ErrorMessage';
 import FormInput from './components/FormInput';
 
@@ -20,7 +20,6 @@ const Login = (): JSX.Element => {
            navigate('/');
        }
     });
-
 
     useEffect(() => {
         setShowError(false);
@@ -75,7 +74,7 @@ const Login = (): JSX.Element => {
                                 onBlurFn={handleUserName}
                                 type={'text'}
                                 validation={username === null}
-                                iconName={IconNames.Person}
+                                icon={<Icon.PersonFill />}
                             />
                             <FormInput
                                 id={'password'}
@@ -83,7 +82,7 @@ const Login = (): JSX.Element => {
                                 onBlurFn={handlePassword}
                                 type={'password'}
                                 validation={password === null}
-                                iconName={IconNames.Lock}
+                                icon={<Icon.Lock />}
                             />
                             {showError && <ErrorMessage />}
                             <Button onClick={handleSubmit}>Zaloguj</Button>

@@ -7,11 +7,9 @@ import Dashboard from "./pages/dashboard/Dashboard";
 import Grades from "./pages/grades/Grades";
 import Login from './pages/login/Login';
 import NoMatch from "./pages/nomatch/NoMatch";
-import NavMenu from './components/NavigationMenu/NavMenu';
 import TeachersList from './pages/teachersList/TeachersList';
 import SubjectsList from './pages/subjectsList/SubjectsList';
 import Settings from './pages/settings/Settings';
-import Help from './pages/help/help';
 import Announcements from './pages/announcements/Announcements';
 import Deadlines from './pages/deadlines/Deadlines';
 
@@ -36,7 +34,6 @@ const App = (): JSX.Element => {
                     <Route path="terminy" element={<Deadlines />} />
                     <Route path="komunikaty" element={<Announcements />} />
                     <Route path="ustawienia" element={<Settings />} />
-                    <Route path="pomoc" element={<Help />} />
                     <Route path="*" element={<NoMatch />} />
                 </Route>
                 <Route path="/login" element={<Login />} />
