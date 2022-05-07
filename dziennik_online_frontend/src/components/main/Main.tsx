@@ -1,19 +1,28 @@
-import { Link, Outlet, useNavigate } from 'react-router-dom';
+import * as React from 'react';
+import { Outlet, useNavigate } from 'react-router-dom';
 import useAuth from "../../context/AuthContext/useAuth";
-
+import NavMenu from '../NavigationMenu/NavMenu'; 
 const Main = (): JSX.Element => {
     const {user, onLogout} = useAuth();
     const navigate = useNavigate()
 
     return (
         <>
-            Zalogowany jako: {user?.firstName} {user?.lastName}
-            <div>
-                <button onClick={() => navigate("/")}>Home</button>
-                <button onClick={() => navigate("/oceny")}>Oceny</button>
-                <button onClick={onLogout}>Wyloguj</button>
-            </div>
-            <Outlet />
+            <tbody>
+                <tr>
+                     <td>
+                        <NavMenu/>
+                     </td>
+                    <td className="main-column-styles">
+                        Zalogowany jako: {user?.firstName} {user?.lastName}
+                        <div>
+                            <button onClick={onLogout}>Wyloguj</button>
+                        </div>
+                         <Outlet />
+                    </td>
+                </tr>
+          
+            </tbody>
         </>
     )
 }
