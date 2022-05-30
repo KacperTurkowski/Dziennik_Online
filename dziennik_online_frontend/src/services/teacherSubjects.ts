@@ -1,5 +1,6 @@
 import axios from "axios";
 import { API_URL } from "../config/API_URL";
+import { getTeacherSubject } from "../mocks/mocks";
 
 export const getTeacherSubjects = async (uuid: string) => {
     try {
@@ -13,9 +14,10 @@ export const getTeacherSubjects = async (uuid: string) => {
     }
 }
 
+//TODO remove after integrate with backend
 export const getFakeTeacherSubjects = async() => {
     try {
-        const response = await axios.get('https://mocki.io/v1/029bf526-104b-4be9-83ee-b8f5b6e7c5f4')
+        const response = await getTeacherSubject();
         return response.data
     } catch (e) {
         throw e;

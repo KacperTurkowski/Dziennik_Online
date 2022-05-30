@@ -4,7 +4,6 @@ const SubjectsList = (): JSX.Element => {
     return (
         <>
             Twoje przedmioty
-            <Outlet />
         </>
     )
 }
