@@ -1,35 +1,75 @@
 import React from 'react';
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import Main from "./components/main/Main";
+import StudentNavMenu from "./components/navbar/student/StudentNavMenu";
+import TeacherNavMenu from "./components/navbar/teacher/TeacherNavMenu";
 import AuthProvider from "./context/AuthContext/AuthProvider";
 import useAuth from "./context/AuthContext/useAuth";
-import Dashboard from "./pages/dashboard/Dashboard";
+import { Role } from "./interfaces/UserInterface";
 import Login from './pages/login/Login';
 import NoMatch from "./pages/nomatch/NoMatch";
-import Subject from "./pages/subjects/subjectPage/Subject";
-import SubjectsList from './pages/subjects/SubjectsList';
+import Dashboard from "./pages/teacher/dashboard/Dashboard";
+import Subject from "./pages/teacher/subjects/subjectPage/Subject";
+import SubjectsList from './pages/teacher/subjects/SubjectsList';
 
 const App = (): JSX.Element => {
 
     const Authenticated = (): JSX.Element => {
         const {user} = useAuth();
 
-        return (
-            user ? <Main /> : <Navigate to="/login" />
-        )
+        switch (user?.role) {
+            case Role.Student:
+                return <Navigate to={'/student'}/>
+            case Role.Teacher:
+                return <Navigate to={'/teacher'}/>
+        }
+
+        return <Navigate to={'/login'}/>
     }
+
+    const PrivateRoute = ({children, role}: { children: JSX.Element; role: Role }) => {
+        const {user} = useAuth();
+
+        if ( !user ) {
+            return <Navigate to="/login"/>
+        }
+
+        if ( user.role !== role ) {
+            return <Navigate to="/"/>
+        }
+
+        return children;
+    };
 
     return (
         <AuthProvider>
             <Routes>
-                <Route path='/' element={<Authenticated />}>
-                    <Route index element={<Dashboard />} />
-                    <Route path="przedmioty" element={<SubjectsList />} />
-                    <Route path="przedmioty/:subject" element={<Subject />} />
-                    <Route path="*" element={<NoMatch />} />
+                <Route path='/' element={<Authenticated/>}/>
+                <Route
+                    path='/teacher/*'
+                    element={
+                        <PrivateRoute role={Role.Teacher}>
+                            <Main navigation={<TeacherNavMenu/>}/>
+                        </PrivateRoute>
+                    }
+                >
+                    <Route index element={<Dashboard/>}/>
+                    <Route path="przedmioty" element={<SubjectsList/>}/>
+                    <Route path="przedmioty/:subject/" element={<Subject/>}/>
+                    <Route path="*" element={<NoMatch/>}/>
                 </Route>
-                <Route path="/login" element={<Login />} />
-                <Route path="*" element={<NoMatch />} />
+                <Route
+                    path='/student'
+                    element={
+                        <PrivateRoute role={Role.Student}>
+                            <Main navigation={<StudentNavMenu/>}/>
+                        </PrivateRoute>
+                    }
+                >
+                    <Route path="*" element={<NoMatch/>}/>
+                </Route>
+                <Route path="/login" element={<Login/>}/>
+                <Route path="*" element={<NoMatch/>}/>
             </Routes>
         </AuthProvider>
     )

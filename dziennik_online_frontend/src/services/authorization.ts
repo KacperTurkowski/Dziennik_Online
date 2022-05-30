@@ -2,6 +2,7 @@
 
 import axios from "axios";
 import { API_URL } from "../config/API_URL";
+import { getUser } from "../mocks/mocks";
 
 export const loginApi = async(login: string, password: string) => {
     try {
@@ -15,10 +16,11 @@ export const loginApi = async(login: string, password: string) => {
         throw e;
     }
 }
-//TOOD: remove after integrate with backend
+
+//TODO remove after integrate with backend
 export const loginFakeApi = async() => {
     try {
-        const response = await axios.get('https://mocki.io/v1/168aa607-c717-4719-bc2d-9df24e0f7cb8')
+        const response = await getUser()
         return response.data
     } catch (e) {
         throw e;

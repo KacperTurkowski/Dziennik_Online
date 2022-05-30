@@ -1,6 +1,6 @@
 const Dashboard = (): JSX.Element => {
     return (
-        <>Dashboard</>
+        <>Dashboard Teacher</>
     )
 }
 

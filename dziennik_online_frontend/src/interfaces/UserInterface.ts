@@ -2,5 +2,10 @@ export interface UserInterface {
     guid: string,
     firstName: string,
     lastName: string,
-    role: 'Teacher' | 'Student'
+    role: Role
+}
+
+export enum Role {
+    Teacher = 'Teacher',
+    Student = 'Student'
 }
