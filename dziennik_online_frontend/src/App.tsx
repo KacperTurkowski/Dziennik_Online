@@ -9,6 +9,7 @@ import { Role } from "./interfaces/UserInterface";
 import Login from './pages/login/Login';
 import NoMatch from "./pages/nomatch/NoMatch";
 import Dashboard from "./pages/teacher/dashboard/Dashboard";
+import GradeTypeStatistics from "./pages/teacher/statistics/GradeTypeStatistics";
 import Subject from "./pages/teacher/subjects/subjectPage/Subject";
 import SubjectsList from './pages/teacher/subjects/SubjectsList';
 
@@ -55,7 +56,7 @@ const App = (): JSX.Element => {
                 >
                     <Route index element={<Dashboard/>}/>
                     <Route path="przedmioty" element={<SubjectsList/>}/>
-                    <Route path="przedmioty/:subject/" element={<Subject/>}/>
+                    <Route path="przedmioty/:subject" element={<Subject/>}/>
                     <Route path="*" element={<NoMatch/>}/>
                 </Route>
                 <Route

@@ -26,3 +26,86 @@ export const getTeacherSubject = (): Promise<any> => {
         }, 300);
     });
 }
+
+export const getStatisticsForGradeTypeId = (): Promise<any> => {
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            resolve({
+                data: [
+                    {
+                        "grade": 2,
+                        "count": 1,
+                        "students": [
+                            {
+                                "name": "Darcey",
+                                "surname": "Peacock",
+                                "id": 10,
+                                "login": "Aisha2010"
+                            }
+                        ]
+                    },
+                    {
+                        "grade": 3,
+                        "count": 4,
+                        "students": [
+                            {
+                                "name": "Desirae",
+                                "surname": "Walden",
+                                "id": 19,
+                                "login": "Aguilera1993"
+                            },
+                            {
+                                "name": "Desirae",
+                                "surname": "Walden",
+                                "id": 19,
+                                "login": "Aguilera1993"
+                            },
+                            {
+                                "name": "Desirae",
+                                "surname": "Walden",
+                                "id": 19,
+                                "login": "Aguilera1993"
+                            }
+                        ]
+                    },
+                    {
+                        "grade": 4,
+                        "count": 8,
+                        "students": [
+                            {
+                                "name": "Desirae",
+                                "surname": "Walden",
+                                "id": 19,
+                                "login": "Aguilera1993"
+                            }
+                        ]
+                    },
+                    {
+                        "grade": 5,
+                        "count": 4,
+                        "students": [
+                            {
+                                "name": "Desirae",
+                                "surname": "Walden",
+                                "id": 19,
+                                "login": "Aguilera1993"
+                            }
+                        ]
+                    },
+                    {
+                        "grade": 6,
+                        "count": 1,
+                        "students": [
+                            {
+                                "name": "Desirae",
+                                "surname": "Walden",
+                                "id": 19,
+                                "login": "Aguilera1993"
+                            }
+                        ]
+                    }
+                ]
+            });
+        }, 300);
+    });
+}
