@@ -1,5 +1,6 @@
 ﻿using System;
 using Dziennik_Online_Backend.DbModels;
+using Dziennik_Online_Backend.Models;
 using Dziennik_Online_Backend.Models.Teacher;
 using Dziennik_Online_Backend.Repositories;
 
@@ -16,7 +17,8 @@ namespace Dziennik_Online_Backend.Services
 
         public List<SubjectInfo> GetListOfClasses(Guid guid)
         {
-            return _repository.GetListOfClasses(guid).Select(x=>new SubjectInfo(x.Id, x.SchoolSubjectName, x.ClassId)).ToList();
+            return _repository.GetListOfClasses(guid).Select(x =>
+                new SubjectInfo(x.Id, x.SchoolSubjectName, x.ClassId, className: ClassNameProvider.GetClassName(x.ClassId))).ToList();
         }
     }
 }
