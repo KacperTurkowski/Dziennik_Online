@@ -2,15 +2,17 @@
 
 namespace Dziennik_Online_Backend.Models.Teacher
 {
-    public class GradeBasicInfo
+    public class SimpleGradeDetails
     {
-        public int Id { get; set; }
+        public string Commentary { get; set; } = null!;
         public int Value { get; set; }
         public int UserId { get; set; }
 
-        public GradeBasicInfo(Grade grade)
+        public SimpleGradeDetails() { }
+
+        public SimpleGradeDetails(Grade grade)
         {
-            Id = grade.Id;
+            Commentary = grade.Commentary;
             Value = grade.Value;
             UserId = grade.UserId;
         }

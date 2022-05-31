@@ -2,12 +2,12 @@
 
 namespace Dziennik_Online_Backend.Models.Teacher
 {
-    public class GradeTypeInfo
+    public class GradeIdTypeInfo
     {
         public int GradeTypeId { get; set; }
         public string Name { get; set; } = null!;
 
-        public GradeTypeInfo(GradeType type)
+        public GradeIdTypeInfo(GradeType type)
         {
             GradeTypeId = type.Id;
             Name = type.Name;
