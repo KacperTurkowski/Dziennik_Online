@@ -3,15 +3,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Dziennik_Online_Backend.Repositories
 {
-    public interface IStudentStatisticsRepository
-    {
-        bool CheckPrivilegesForGradeType(int gradeTypeId, Guid studentGuid);
-        List<Grade> GetGradesForGradeTypeId(int gradeTypeId);
-
-        bool CheckPrivilegesSchoolSubject(int schoolSubjectId, object userGuid);
-        List<Grade> GetGradesForStudentSchool(Guid userGuid, int schoolSubjectId);
-    }
-
     public class StudentStatisticsRepository : IStudentStatisticsRepository
     {
         public bool CheckPrivilegesForGradeType(int gradeTypeId, Guid studentGuid)
@@ -28,11 +19,6 @@ namespace Dziennik_Online_Backend.Repositories
         {
             using var dbContext = new project_dbContext();
             return dbContext.Grades.Where(x => x.GradeTypeId == gradeTypeId).ToList();
-        }
-
-        public bool CheckPrivilegesSchoolSubject(int schoolSubjectId, object userGuid)
-        {
-            throw new NotImplementedException();
         }
 
         public List<Grade> GetGradesForStudentSchool(Guid userGuid, int schoolSubjectId)
