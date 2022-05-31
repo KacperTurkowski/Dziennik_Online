@@ -1,4 +1,4 @@
-﻿namespace Dziennik_Online_Backend.Models;
+﻿namespace Dziennik_Online_Backend.Models.Teacher;
 
 public class GradeTypeWithUserGuid
 {
