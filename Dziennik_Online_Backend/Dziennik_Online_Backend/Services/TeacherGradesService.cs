@@ -1,4 +1,5 @@
-﻿using Dziennik_Online_Backend.Models.Teacher;
+﻿using Dziennik_Online_Backend.Models;
+using Dziennik_Online_Backend.Models.Teacher;
 using Dziennik_Online_Backend.Repositories;
 
 namespace Dziennik_Online_Backend.Services
@@ -21,7 +22,7 @@ namespace Dziennik_Online_Backend.Services
             return new TeacherSubjectDetails()
             {
                 Students = students.Select(p => new StudentBasicInfo(p)).ToList(),
-                Subject = new SubjectInfo(schoolSubject),
+                Subject = new SubjectInfo(schoolSubject, ClassNameProvider.GetClassName(schoolSubject.ClassId)),
                 GradeTypes = schoolSubject.GradeTypes.Select(p => new GradeIdTypeInfo(p)).ToList(),
                 GradeTypeIdGradeListDictionary = schoolSubject.GradeTypes.ToDictionary(k => k.Id, v => v.Grades.Select(p => new GradeBasicInfo(p)).ToList())
             };
