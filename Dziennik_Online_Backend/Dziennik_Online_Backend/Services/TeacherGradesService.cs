@@ -27,16 +27,33 @@ namespace Dziennik_Online_Backend.Services
             };
         }
 
-        public GradeDetails GetGrade(int gradeId)
+        public TeacherGradeDetails GetGrade(int gradeId)
         {
             var grade = _repository.GetGrade(gradeId);
-            return new GradeDetails(grade);
+            return new TeacherGradeDetails()
+            {
+                Commentary = grade.Commentary,
+                Value = grade.Value,
+                Student = new StudentBasicInfo(grade.User),
+                GradeTypeId = grade.GradeTypeId,
+                Id = grade.Id,
+            };
         }
 
-        public GradeTypeDetails GetGradeType(int grateTypeId)
+        public TeacherGradeTypeDetails GetGradeType(int grateTypeId)
         {
             var gradeType = _repository.GetGradeType(grateTypeId);
-            return new GradeTypeDetails(gradeType);
+            if (gradeType?.SchoolSubject == null) throw new ArgumentException();
+            var students = _repository.GetStudents(gradeType.SchoolSubject.ClassId);
+            return new TeacherGradeTypeDetails()
+            {
+                Id = gradeType.Id,
+                Name = gradeType.Name,
+                Weight = gradeType.Weight,
+                SchoolSubjectId = gradeType.SchoolSubjectId,
+                GradeDetails = gradeType.Grades.Select(p => new GradeDetails(p)).ToList(),
+                Students = students.Select(p => new StudentBasicInfo(p)).ToList(),
+            };
         }
 
 

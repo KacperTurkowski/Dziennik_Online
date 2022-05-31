@@ -34,7 +34,10 @@ namespace Dziennik_Online_Backend.Repositories
         public GradeType GetGradeType(int gradeTypeId)
         {
             using var dbContext = new project_dbContext();
-            return dbContext.GradeTypes.SingleOrDefault(p => p.Id == gradeTypeId);
+            return dbContext.GradeTypes
+                .Include(p => p.Grades)
+                .Include(p => p.SchoolSubject)
+                .SingleOrDefault(p => p.Id == gradeTypeId);
         }
 
 
@@ -48,7 +51,9 @@ namespace Dziennik_Online_Backend.Repositories
         public Grade GetGrade(int gradeId)
         {
             using var dbContext = new project_dbContext();
-            return dbContext.Grades.SingleOrDefault(p => p.Id == gradeId);
+            return dbContext.Grades
+                .Include(p => p.User)
+                .SingleOrDefault(p => p.Id == gradeId);
         }
 
         public void RemoveGradeType(int gradeTypeId)
