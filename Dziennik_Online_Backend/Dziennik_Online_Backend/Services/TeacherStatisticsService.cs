@@ -27,7 +27,7 @@ public class TeacherStatisticsService : ITeacherStatisticsService
         };
     }
 
-    public Dictionary<int, GroupOfGrade> GetDataForColumnChart(GradeTypeWithUserGuid gradeTypeWithUserGuid)
+    public List<GroupOfGrade> GetDataForColumnChart(GradeTypeWithUserGuid gradeTypeWithUserGuid)
     {
         if (!_teacherStatisticsRepository.CheckPrivilegesForGradeType(gradeTypeWithUserGuid.GradeTypeId,
                 gradeTypeWithUserGuid.UserGuid))
@@ -35,9 +35,9 @@ public class TeacherStatisticsService : ITeacherStatisticsService
 
         var data = _teacherStatisticsRepository.GetGradesAndUsersForGradeTypeId(gradeTypeWithUserGuid.GradeTypeId);
 
-        return data.GroupBy(x => x.Value).ToDictionary(gradesGroup => gradesGroup.Key,
-            gradesGroup => new GroupOfGrade
+        return data.GroupBy(x => x.Value).Select(gradesGroup => new GroupOfGrade
             {
+                Grade = gradesGroup.Key,
                 Students = gradesGroup.Select(x => new StudentBasicInfo
                 {
                     Id = x.User.Id,
@@ -45,7 +45,7 @@ public class TeacherStatisticsService : ITeacherStatisticsService
                     Name = x.User.Name, 
                     Surname = x.User.Surname
                 }).ToList()
-            });
+            }).ToList();
     }
 
     public double GetAverageForStudent(AverageForStudent averageForStudent)

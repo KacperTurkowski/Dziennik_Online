@@ -13,6 +13,7 @@ public static class ServiceExtensions
         collection.AddSingleton<IStudentStatisticsRepository, StudentStatisticsRepository>();
         collection.AddSingleton<ITeacherGradesRepository, TeacherGradesRepository>();
         collection.AddSingleton<IStudentSubjectsRepository, StudentSubjectsRepository>();
+        collection.AddSingleton<IStudentGradesRepository, StudentGradesRepository>();
     }
 
     public static void RegisterServices(this IServiceCollection collection)
@@ -23,5 +24,6 @@ public static class ServiceExtensions
         collection.AddSingleton<IStudentStatisticsService, StudentStatisticsService>();
         collection.AddSingleton<ITeacherGradesService, TeacherGradesService>();
         collection.AddSingleton<IStudentSubjectsService, StudentSubjectsService>();
+        collection.AddSingleton<IStudentGradesService, StudentGradesService>();
     }
 }
