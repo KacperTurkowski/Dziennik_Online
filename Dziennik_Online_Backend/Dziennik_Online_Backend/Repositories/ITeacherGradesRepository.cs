@@ -4,6 +4,7 @@ namespace Dziennik_Online_Backend.Repositories
 {
     public interface ITeacherGradesRepository
     {
+        bool CheckPrivilegesForSubject(int subjectId, Guid teacherGuid);
         SchoolSubject GetSchoolSubject(int subjectId);
         List<User> GetStudents(int classId);
         void UpdateGradeType(GradeType gradeType);

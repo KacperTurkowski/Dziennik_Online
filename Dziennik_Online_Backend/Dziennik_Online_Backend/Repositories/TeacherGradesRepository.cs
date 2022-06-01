@@ -83,5 +83,11 @@ namespace Dziennik_Online_Backend.Repositories
                 dbContext.SaveChanges();
             }
         }
+
+        public bool CheckPrivilegesForSubject(int subjectId, Guid teacherGuid)
+        {
+            using var dbContext = new project_dbContext();
+            return dbContext.SchoolSubjects.Include(p => p.User).Any(p => p.Id == subjectId && p.User != null && p.User.Guid == teacherGuid);
+        }
     }
 }

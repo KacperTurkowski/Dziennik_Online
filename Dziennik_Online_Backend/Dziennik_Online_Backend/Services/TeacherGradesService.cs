@@ -13,10 +13,12 @@ namespace Dziennik_Online_Backend.Services
             _repository = repository;
         }
 
-        public TeacherSubjectDetails GetTeacherSubject(int subjectId)
+        public TeacherSubjectDetails GetTeacherSubject(SubjectIdWithUserGuid subjectIdWithUserGuid)
         {
-            var schoolSubject = _repository.GetSchoolSubject(subjectId);
-            if(schoolSubject == null) throw new ArgumentException();
+            if (!_repository.CheckPrivilegesForSubject(subjectIdWithUserGuid.SubjectId, subjectIdWithUserGuid.UserGuid))
+                throw new UnauthorizedAccessException();
+
+            var schoolSubject = _repository.GetSchoolSubject(subjectIdWithUserGuid.SubjectId);
             var students = _repository.GetStudents(schoolSubject.ClassId);
 
             return new TeacherSubjectDetails()
@@ -24,13 +26,20 @@ namespace Dziennik_Online_Backend.Services
                 Students = students.Select(p => new StudentBasicInfo(p)).ToList(),
                 Subject = new SubjectInfo(schoolSubject, ClassNameProvider.GetClassName(schoolSubject.ClassId)),
                 GradeTypes = schoolSubject.GradeTypes.Select(p => new GradeIdTypeInfo(p)).ToList(),
-                GradeTypeIdGradeListDictionary = schoolSubject.GradeTypes.ToDictionary(k => k.Id, v => v.Grades.Select(p => new GradeBasicInfo(p)).ToList())
+                GradeTypeWithGrades = schoolSubject.GradeTypes.Select(p => new GradeTypeBasicInfo()
+                {
+                    GradeTypeId = p.Id,
+                    Grades = p.Grades.Select(g => new GradeBasicInfo(g)).ToList()
+                }).ToList()
             };
         }
 
-        public TeacherGradeDetails GetGrade(int gradeId)
+        public TeacherGradeDetails GetGrade(GradeIdWithUserGuid gradeIdWithUserGuid)
         {
-            var grade = _repository.GetGrade(gradeId);
+            if (!_repository.CheckPrivilegesForSubject(gradeIdWithUserGuid.SubjectId, gradeIdWithUserGuid.UserGuid))
+                throw new UnauthorizedAccessException();
+
+            var grade = _repository.GetGrade(gradeIdWithUserGuid.GradeId);
             return new TeacherGradeDetails()
             {
                 Commentary = grade.Commentary,
@@ -41,10 +50,13 @@ namespace Dziennik_Online_Backend.Services
             };
         }
 
-        public TeacherGradeTypeDetails GetGradeType(int grateTypeId)
+        public TeacherGradeTypeDetails GetGradeType(GradeTypeIdWithUserGuid grapeTypeIdWithUserGuid)
         {
-            var gradeType = _repository.GetGradeType(grateTypeId);
-            if (gradeType?.SchoolSubject == null) throw new ArgumentException();
+            if (!_repository.CheckPrivilegesForSubject(grapeTypeIdWithUserGuid.SubjectId, grapeTypeIdWithUserGuid.UserGuid))
+                throw new UnauthorizedAccessException();
+
+            var gradeType = _repository.GetGradeType(grapeTypeIdWithUserGuid.GradeTypeId);
+            if (gradeType?.SchoolSubject == null) return null;
             var students = _repository.GetStudents(gradeType.SchoolSubject.ClassId);
             return new TeacherGradeTypeDetails()
             {
@@ -58,82 +70,97 @@ namespace Dziennik_Online_Backend.Services
         }
 
 
-        public void AddGradeType(int schoolSubjectId, SimpleGradeTypeDetails gradeType)
+        public void AddGradeType(AddSimpleGradeTypeDetailsWithUserGuid gradeType)
         {
+            if (!_repository.CheckPrivilegesForSubject(gradeType.SubjectId, gradeType.UserGuid))
+                throw new UnauthorizedAccessException();
+
             _repository.UpdateGradeType(new DbModels.GradeType
             {
                 Id = default,
                 Name = gradeType.Name,
                 Weight = gradeType.Weight,
-                SchoolSubjectId = schoolSubjectId,
+                SchoolSubjectId = gradeType.SubjectId,
                 Grades = gradeType.GradeDetails.Select(grade =>
                     new DbModels.Grade
                     {
                         Id = default,
                         GradeTypeId = default,
                         Commentary = grade.Commentary,
-                        UserId = grade.UserId,
+                        UserId = grade.StudentId,
                         Value = grade.Value,
                         TimeStamp = DateTime.Now
                     }).ToList()
             });
         }
 
-        public void UpdateGradeType(int schoolSubjectId, int grateTypeId, GradeTypeDetails gradeType)
+        public void UpdateGradeType(SimpleGradeTypeDetailsWithUserGuid gradeType)
         {
+            if (!_repository.CheckPrivilegesForSubject(gradeType.SubjectId, gradeType.UserGuid))
+                throw new UnauthorizedAccessException();
+
             _repository.UpdateGradeType(new DbModels.GradeType
             {
-                Id = grateTypeId,
+                Id = gradeType.GradeTypeId,
                 Name = gradeType.Name,
                 Weight = gradeType.Weight,
-                SchoolSubjectId = schoolSubjectId,
+                SchoolSubjectId = gradeType.SubjectId,
                 Grades = gradeType.GradeDetails.Select(grade =>
                     new DbModels.Grade
                     {
-                        Id = grade.Id,
-                        GradeTypeId = grateTypeId,
+                        Id = grade.GradeId,
+                        GradeTypeId = gradeType.GradeTypeId,
                         Commentary = grade.Commentary,
-                        UserId = grade.UserId,
+                        UserId = grade.StudentId,
                         Value = grade.Value,
                         TimeStamp = DateTime.Now
                     }).ToList()
             });
         }
 
-        public void AddGrade(int gradeTypeId, SimpleGradeDetails grade)
+        public void AddGrade(AddSimpleGradeDetailsWithUserGuid grade)
         {
+            if (!_repository.CheckPrivilegesForSubject(grade.SubjectId, grade.UserGuid))
+                throw new UnauthorizedAccessException();
+
             _repository.UpdateGrade(new DbModels.Grade
             {
                 Id = default,
-                GradeTypeId = gradeTypeId,
+                GradeTypeId = grade.GradeTypeId,
                 Commentary = grade.Commentary,
-                UserId = grade.UserId,
+                UserId = grade.StudentId,
                 Value = grade.Value,
                 TimeStamp = DateTime.Now
             });
         }
 
-        public void UpdateGrade(int gradeTypeId, int gradeId, SimpleGradeDetails grade)
+        public void UpdateGrade(SimpleGradeDetailsWithUserGuid grade)
         {
+            if (!_repository.CheckPrivilegesForSubject(grade.SubjectId, grade.UserGuid))
+                throw new UnauthorizedAccessException();
+
             _repository.UpdateGrade(new DbModels.Grade
             {
-                Id = gradeId,
-                GradeTypeId = gradeTypeId,
+                Id = grade.GradeId,
+                GradeTypeId = grade.GradeTypeId,
                 Commentary = grade.Commentary,
-                UserId = grade.UserId,
+                UserId = grade.StudentId,
                 Value = grade.Value,
                 TimeStamp = DateTime.Now
             });
         }
 
-        public void RemoveGradeType(int gradeTypeId)
+        public void RemoveGradeType(GradeTypeIdWithUserGuid grapeTypeIdWithUserGuid)
         {
-            _repository.RemoveGradeType(gradeTypeId);
+            if (!_repository.CheckPrivilegesForSubject(grapeTypeIdWithUserGuid.SubjectId, grapeTypeIdWithUserGuid.UserGuid))
+                throw new UnauthorizedAccessException();
+
+            _repository.RemoveGradeType(grapeTypeIdWithUserGuid.GradeTypeId);
         }
         
-        public void RemoveGrade(int gradeId)
+        public void RemoveGrade(GradeIdWithUserGuid grapeTypeIdWithUserGuid)
         {
-            _repository.RemoveGrade(gradeId);
+            _repository.RemoveGrade(grapeTypeIdWithUserGuid.GradeId);
         }
     }
 }

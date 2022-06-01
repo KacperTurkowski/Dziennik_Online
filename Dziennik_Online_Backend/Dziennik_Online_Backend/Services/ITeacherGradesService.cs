@@ -4,14 +4,16 @@ namespace Dziennik_Online_Backend.Services
 {
     public interface ITeacherGradesService
     {
-        TeacherSubjectDetails GetTeacherSubject(int subjectId);
-        TeacherGradeDetails GetGrade(int gradeId);
-        TeacherGradeTypeDetails GetGradeType(int gradeTypeId);
-        void AddGradeType(int schoolSubjectId, SimpleGradeTypeDetails gradeType);
-        void UpdateGradeType(int schoolSubjectId, int grateTypeId, GradeTypeDetails gradeType);
-        void AddGrade(int gradeTypeId, SimpleGradeDetails grade);
-        void UpdateGrade(int gradeTypeId, int gradeId, SimpleGradeDetails grade);
-        void RemoveGradeType(int gradeTypeId);
-        void RemoveGrade(int gradeId);
+        TeacherSubjectDetails GetTeacherSubject(SubjectIdWithUserGuid subjectIdWithUserGuid);
+
+        TeacherGradeDetails GetGrade(GradeIdWithUserGuid grapeTypeIdWithUserGuid);
+        void RemoveGrade(GradeIdWithUserGuid grapeTypeIdWithUserGuid);
+        void AddGrade(AddSimpleGradeDetailsWithUserGuid simpleGradeDetails);
+        void UpdateGrade(SimpleGradeDetailsWithUserGuid simpleGradeDetails);
+
+        TeacherGradeTypeDetails GetGradeType(GradeTypeIdWithUserGuid gradeIdWithUserGuid);
+        void RemoveGradeType(GradeTypeIdWithUserGuid grapeTypeIdWithUserGuid);
+        void AddGradeType(AddSimpleGradeTypeDetailsWithUserGuid gradeType);
+        void UpdateGradeType(SimpleGradeTypeDetailsWithUserGuid gradeType);
     }
 }
