@@ -18,8 +18,15 @@ namespace Dziennik_Online_Backend.Repositories
         [HttpPost]
         public IActionResult GetSubjectsForStudent([FromBody] Guid guid)
         {
-            var classes = _service.GetListOfClasses(guid);
-            return new OkObjectResult(classes);
+            try
+            {
+                var classes = _service.GetListOfClasses(guid);
+                return new OkObjectResult(classes);
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return new StatusCodeResult(401);
+            }
         }
     }
 }
