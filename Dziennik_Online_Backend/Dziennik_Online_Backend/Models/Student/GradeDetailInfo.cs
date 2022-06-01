@@ -6,5 +6,7 @@
         public int Value { get; set; }
         public string Commentary { get; set; } = null!;
         public int GradeTypeId { get; set; }
+        public double Weight { get; set; }
+        public DateTime Date { get; set; }
     }
 }

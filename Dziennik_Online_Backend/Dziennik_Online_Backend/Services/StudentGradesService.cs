@@ -36,12 +36,18 @@ namespace Dziennik_Online_Backend.Services
             var grade = _studentGradesRepository.GetGradeById(gradeIdWithGuid.Guid, gradeIdWithGuid.GradeId);
             if (grade == null)
                 return null;
+
+            var gradeType = _studentGradesRepository.GetGradeTypeById(gradeIdWithGuid.Guid, grade.GradeTypeId);
+            if (gradeType == null)
+                return null;
             return new GradeDetailInfo
             {
                 Commentary = grade.Commentary,
                 GradeTypeId = grade.GradeTypeId,
                 Id = grade.Id,
-                Value = grade.Value
+                Value = grade.Value,
+                Date = grade.TimeStamp,
+                Weight = gradeType.Weight
             };
         }
         public List<GradeDetailInfo> GetStudentReport(Guid guid)
@@ -51,7 +57,9 @@ namespace Dziennik_Online_Backend.Services
                 Commentary = grade.Commentary,
                 GradeTypeId = grade.GradeTypeId,
                 Id = grade.Id,
-                Value = grade.Value
+                Value = grade.Value,
+                Date = grade.TimeStamp,
+                Weight = grade.GradeType.Weight
             }).ToList();
         }
     }

@@ -11,6 +11,8 @@ namespace Dziennik_Online_Backend.Repositories
             {
                 var user = dbContext.Users.Include(x => x.SchoolSubjects).ThenInclude(x => x.GradeTypes)
                     .SingleOrDefault(x => x.Guid == guid);
+                if (user == null)
+                    throw new UnauthorizedAccessException();
 
                 return dbContext.SchoolSubjects.Include(x => x.GradeTypes)
                     .SingleOrDefault(x => x.Id == subjectId && x.ClassId == user.ClassId)?.GradeTypes.ToList() ?? new List<GradeType>();
@@ -38,12 +40,23 @@ namespace Dziennik_Online_Backend.Repositories
                     .SingleOrDefault(x => x.Id == gradeId && x.GradeType.SchoolSubject.ClassId == user.ClassId);
             }
         }
+        public GradeType? GetGradeTypeById(Guid guid, int gradeTypeId)
+        {
+            using (var dbContext = new project_dbContext())
+            {
+                var user = dbContext.Users.SingleOrDefault(x => x.Guid == guid);
+                if (user == null)
+                    throw new UnauthorizedAccessException();
+
+                return dbContext.GradeTypes.Include(x=>x.SchoolSubject).SingleOrDefault(x => x.Id == gradeTypeId && x.SchoolSubject.ClassId == user.ClassId);
+            }
+        }
 
         public List<Grade> GetLast10Grades(Guid guid)
         {
             using (var dbContext = new project_dbContext())
             {
-                return dbContext.Users.Include(x=>x.Grades).SingleOrDefault(x => x.Guid == guid)?.Grades.OrderByDescending(x=>x.TimeStamp).Take(10).ToList() ?? new List<Grade>();
+                return dbContext.Users.Include(x=>x.Grades).ThenInclude(x=>x.GradeType).SingleOrDefault(x => x.Guid == guid)?.Grades.OrderByDescending(x=>x.TimeStamp).Take(10).ToList() ?? new List<Grade>();
             }
         }
     }

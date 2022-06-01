@@ -8,4 +8,5 @@ public interface IStudentGradesRepository
     List<Grade> GetGrades(Guid guid);
     Grade? GetGradeById(Guid guid, int gradeId);
     List<Grade> GetLast10Grades(Guid guid);
+    public GradeType? GetGradeTypeById(Guid guid, int gradeTypeId);
 }

@@ -6,5 +6,5 @@ public interface IStudentStatisticsRepository
 {
     bool CheckPrivilegesForGradeType(int gradeTypeId, Guid studentGuid);
     List<Grade> GetGradesForGradeTypeId(int gradeTypeId);
-    List<Grade> GetGradesForStudentSchool(Guid userGuid, int schoolSubjectId);
+    List<Grade> GetGradesForStudent(Guid userGuid, int schoolSubjectId);
 }
