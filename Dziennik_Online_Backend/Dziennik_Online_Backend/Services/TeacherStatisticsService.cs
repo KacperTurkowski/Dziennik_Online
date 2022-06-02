@@ -1,4 +1,5 @@
-﻿using Dziennik_Online_Backend.Models;
+﻿using Dziennik_Online_Backend.DbModels;
+using Dziennik_Online_Backend.Models;
 using Dziennik_Online_Backend.Models.Teacher;
 using Dziennik_Online_Backend.Repositories;
 
@@ -53,8 +54,22 @@ public class TeacherStatisticsService : ITeacherStatisticsService
         if (!_teacherStatisticsRepository.CheckPrivilegesSchoolSubject(averageForStudent.SchoolSubjectId,averageForStudent.TeacherGuid))
             throw new UnauthorizedAccessException();
 
-        return _teacherStatisticsRepository.GetGradesForStudentSchool(averageForStudent.StudentLogin,
-            averageForStudent.SchoolSubjectId)?.Average(x=>x.Value) ?? 0;
+        var grades = _teacherStatisticsRepository.GetGradesForStudentSchool(averageForStudent.StudentLogin,
+            averageForStudent.SchoolSubjectId);
+        return GetWeightedAverage(grades);
+    }
+    private double GetWeightedAverage(List<Grade> grades)
+    {
+        if (grades == null || grades.Count == 0)
+            return 0;
+        var counter = 0;
+        var denominator = 0;
+        foreach (var grade in grades)
+        {
+            counter += grade.Value * grade.GradeType.Weight;
+            denominator += grade.GradeType.Weight;
+        }
+        return counter / denominator;
     }
 
     private double GetMedian(List<int> grades)
