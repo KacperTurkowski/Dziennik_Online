@@ -9,7 +9,7 @@ namespace Dziennik_Online_Backend.Models
             using var dbContext = new project_dbContext();
             var classObject = dbContext.Classes.SingleOrDefault(x => x.Id == classId);
 
-            return string.Concat(classObject?.Year, " ", classObject?.SchoolSubjects);
+            return string.Concat(classObject?.Year, " ", classObject?.Department);
         }
     }
 }

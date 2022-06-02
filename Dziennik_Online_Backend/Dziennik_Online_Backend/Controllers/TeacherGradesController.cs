@@ -1,9 +1,10 @@
-﻿using Dziennik_Online_Backend.Models.Teacher;
+﻿using Dziennik_Online_Backend.Models.Student;
+using Dziennik_Online_Backend.Models.Teacher;
 using Dziennik_Online_Backend.Services;
 using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
-[Route("teacher/subjects")]
+[Route("teacher/grades")]
 public class TeacherGradesController
 {
     private readonly ITeacherGradesService _service;
@@ -13,125 +14,125 @@ public class TeacherGradesController
         _service = teacherGradesService;
     }
 
-    [HttpGet("{subjectId:int}")]
-    public IActionResult GetTeacherSubject(int subjectId)
+    [HttpPost("GetSubject")]
+    public IActionResult GetTeacherSubject([FromBody] SubjectIdWithUserGuid subjectIdWithUserGuid)
     {
         try
         {
-            return new OkObjectResult(_service.GetTeacherSubject(subjectId));
+            return new OkObjectResult(_service.GetTeacherSubject(subjectIdWithUserGuid));
         }
-        catch (ArgumentException)
+        catch (UnauthorizedAccessException)
         {
             return new StatusCodeResult(401);
         }
     }
 
-    [HttpGet("{subjectId:int}/{gradeTypeId:int}")]
-    public IActionResult GetTeacherGradeType(int subjectId, int gradeTypeId)
+    [HttpPost("GetGradeType")]
+    public IActionResult GetTeacherGradeType([FromBody] GradeTypeIdWithUserGuid grapeTypeIdWithUserGuid)
     {
         try
         {
-            return new OkObjectResult(_service.GetGradeType(gradeTypeId));
+            return new OkObjectResult(_service.GetGradeType(grapeTypeIdWithUserGuid));
         }
-        catch (ArgumentException)
+        catch (UnauthorizedAccessException)
         {
             return new StatusCodeResult(401);
         }
     }
 
-    [HttpGet("{subjectId:int}/{gradeTypeId:int}/{gradeId:int}")]
-    public IActionResult GetTeacherGrade(int subjectId, int gradeTypeId, int gradeId)
+    [HttpPost("GetGrade")]
+    public IActionResult GetTeacherGrade([FromBody] GradeIdWithUserGuid gradeIdWithUserGuid)
     {
         try
         {
-            return new OkObjectResult(_service.GetGrade(gradeId));
+            return new OkObjectResult(_service.GetGrade(gradeIdWithUserGuid));
         }
-        catch (ArgumentException)
+        catch (UnauthorizedAccessException)
         {
             return new StatusCodeResult(401);
         }
     }
 
-    [HttpPost("{subjectId:int}/{gradeTypeId:int}")]
-    public IActionResult AddTeacherGrade(int subjectId, int gradeTypeId, SimpleGradeDetails grade)
+    [HttpPost("AddGrade")]
+    public IActionResult AddTeacherGrade([FromBody] AddSimpleGradeDetailsWithUserGuid simpleGradeDetails)
     {
         try
         {
-            _service.AddGrade(gradeTypeId, grade);
+            _service.AddGrade(simpleGradeDetails);
             return new OkObjectResult(true);
         }
-        catch (ArgumentException)
+        catch (UnauthorizedAccessException)
         {
             return new StatusCodeResult(401);
         }
     }
 
-    [HttpPut("{subjectId:int}/{gradeTypeId:int}/{gradeId:int}")]
-    public IActionResult UpdateTeacherGrade(int subjectId, int gradeTypeId, int gradeId, [FromBody] SimpleGradeDetails grade)
+    [HttpPost("UpdateGrade")]
+    public IActionResult UpdateTeacherGrade([FromBody] SimpleGradeDetailsWithUserGuid simpleGradeDetails)
     {
         try
         {
-            _service.UpdateGrade(gradeTypeId, gradeId, grade);
+            _service.UpdateGrade(simpleGradeDetails);
             return new OkObjectResult(true);
         }
-        catch (ArgumentException)
+        catch (UnauthorizedAccessException)
         {
             return new StatusCodeResult(401);
         }
     }
 
-    [HttpPost("{subjectId:int}")]
-    public IActionResult AddTeacherGradeType(int subjectId, [FromBody] SimpleGradeTypeDetails gradeType)
+    [HttpPost("AddGradeType")]
+    public IActionResult AddTeacherGradeType([FromBody] AddSimpleGradeTypeDetailsWithUserGuid simpleGradeTypeDetails)
     {
 
         try
         {
-            _service.AddGradeType(subjectId, gradeType);
+            _service.AddGradeType(simpleGradeTypeDetails);
             return new OkObjectResult(true);
         }
-        catch (ArgumentException)
+        catch (UnauthorizedAccessException)
         {
             return new StatusCodeResult(401);
         }
     }
 
-    [HttpPut("{subjectId:int}/{gradeTypeId:int}")]
-    public IActionResult UpdateTeacherGradeType(int subjectId, int gradeTypeId, [FromBody] GradeTypeDetails gradeType)
+    [HttpPost("UpdateGradeType")]
+    public IActionResult UpdateTeacherGradeType([FromBody] SimpleGradeTypeDetailsWithUserGuid simpleGradeTypeDetails)
     {
         try
         {
-            _service.UpdateGradeType(subjectId, gradeTypeId, gradeType);
+            _service.UpdateGradeType(simpleGradeTypeDetails);
             return new OkObjectResult(true);
         }
-        catch (ArgumentException)
+        catch (UnauthorizedAccessException)
         {
             return new StatusCodeResult(401);
         }
     }
 
-    [HttpDelete("{subjectId:int}/{gradeTypeId:int}")]
-    public IActionResult RemoveGradeType(int subjectId, int gradeTypeId)
+    [HttpDelete("DeleteGradeType")]
+    public IActionResult RemoveGradeType([FromBody] GradeTypeIdWithUserGuid grapeTypeIdWithUserGuid)
     {
         try
         {
-            _service.RemoveGradeType(gradeTypeId);
+            _service.RemoveGradeType(grapeTypeIdWithUserGuid);
             return new OkObjectResult(true);
         }
-        catch (ArgumentException)
+        catch (UnauthorizedAccessException)
         {
             return new StatusCodeResult(401);
         }
     }
 
-    [HttpDelete("{subjectId:int}/{gradeTypeId:int}/{gradeId:int}")]
-    public IActionResult RemoveGrade(int subjectId, int gradeTypeId, int gradeId)
+    [HttpDelete("DeleteGrade")]
+    public IActionResult RemoveGrade([FromBody] GradeIdWithUserGuid gradeIdWithUserGuid)
     {
         try
         {
-            _service.RemoveGrade(gradeId);
+            _service.RemoveGrade(gradeIdWithUserGuid);
             return new OkObjectResult(true);
         }
-        catch (ArgumentException)
+        catch (UnauthorizedAccessException)
         {
             return new StatusCodeResult(401);
         }
