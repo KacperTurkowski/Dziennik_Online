@@ -1,4 +1,5 @@
-﻿using Dziennik_Online_Backend.Models.Student;
+﻿using Dziennik_Online_Backend.Models;
+using Dziennik_Online_Backend.Models.Student;
 using Dziennik_Online_Backend.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -47,11 +48,11 @@ namespace Dziennik_Online_Backend.Controllers
         }
 
         [HttpPost("GetStartReport")]
-        public IActionResult GetStudentReport([FromBody] Guid guid)
+        public IActionResult GetStudentReport([FromBody] GuidModel guid)
         {
             try
             {
-                return new OkObjectResult(_service.GetStudentReport(guid));
+                return new OkObjectResult(_service.GetStudentReport(guid.Guid));
             }
             catch (UnauthorizedAccessException)
             {
