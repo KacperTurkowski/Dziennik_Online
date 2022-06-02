@@ -1,0 +1,20 @@
+.statistic-chart {
+    width: 40%;
+    height: auto;
+}
+.custom-tooltip {
+    width: 200px;
+    margin: 0;
+    line-height: 24px;
+    border: 1px solid #f5f5f5;
+    background-color: hsla(0,0%,100%,.9);
+    padding: 10px;
+}
+.btn {
+    background: #7162D9;
+    border: 0;
+    border-radius: 0;
+}
+.btn:hover {
+    background: #564ba3;
+}
