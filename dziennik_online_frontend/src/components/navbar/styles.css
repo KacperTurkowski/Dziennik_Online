@@ -29,6 +29,13 @@
     width: 100%;
 }
 
+.nav-menu-sublist .loading {
+    position: relative;
+    width: 50px !important;
+    height: 50px !important;
+    left: 50px;
+}
+
 .nav-menu-list .list-item div {
     display: flex;
     align-items: center;

@@ -10,6 +10,7 @@
     display: flex;
     justify-content: center;
 }
+
 .login-form-card {
     width: 40%;
     padding: 50px 10px;
@@ -17,6 +18,23 @@
     border-radius: 0;
     border-right: 5px solid #503FBF;
 }
+
+.login-page .overlay {
+    position: absolute;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 9999;
+}
+.login-page .overlay .loading {
+    position: absolute;
+    top: 45%;
+    left: 50%;
+    width: 100px;
+    height: 100px;
+}
+
 .login-form-card .card-body {
     display: flex;
     flex-direction: column;

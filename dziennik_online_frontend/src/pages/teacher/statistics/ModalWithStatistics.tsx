@@ -12,12 +12,7 @@ interface IModalWithStatistics {
 const ModalWithStatistics = (props: IModalWithStatistics) => {
     const {gradeTypeId, userGuid, onHide, show} = props;
     return (
-        <Modal
-            size="lg"
-            aria-labelledby="contained-modal-title-vcenter"
-            centered
-            show={show}
-        >
+        <Modal size="xl" centered={true} show={show}>
             <Modal.Body>
                 <GradeTypeStatistics gradeTypeId={gradeTypeId} userGuid={userGuid}/>
             </Modal.Body>

@@ -1,10 +1,10 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import './style.css';
-import {
-    getFakeStatisticsForGradeTypeId,
-} from "../../../services/teacherSubjects";
+import Loading from "../../../components/loading/Loading";
+import useAuth from "../../../context/AuthContext/useAuth";
+import {getStatisticsGradeTypeId} from "../../../services/teacherSubjects";
 
 interface IGradeTypeStatistics {
     userGuid: string,
@@ -13,9 +13,12 @@ interface IGradeTypeStatistics {
 
 const GradeTypeStatistics = (props: IGradeTypeStatistics) => {
     const [statistics, setStatistics] = useState([]);
+    const {user} = useAuth();
 
     useEffect(() => {
-        getFakeStatisticsForGradeTypeId()
+        const guid = user?.guid || '';
+
+        getStatisticsGradeTypeId('b08cf6dd-4793-482c-8eae-0d0823b678a9',1001)
             .then(statistics => {
                 const preparedStatistics = statistics.map((statistic: any) => {
                     return {
@@ -34,9 +37,9 @@ const GradeTypeStatistics = (props: IGradeTypeStatistics) => {
                 .find((statistic: any) => statistic['grade'] == label)
 
             return grades && (grades['students'] as [])
-                .map((grade: any) => {
+                .map((grade: any, index: number) => {
                     return (
-                        <li>{grade['name']} {grade['surname']}</li>
+                        <li key={index}>{grade['name']} {grade['surname']}</li>
                     )
                 })
         }
@@ -55,12 +58,20 @@ const GradeTypeStatistics = (props: IGradeTypeStatistics) => {
         return null;
     };
 
+    const getLoading = () => {
+        return (
+            <div className={'loading'}>
+                <Loading />
+            </div>
+        )
+    }
+
     return (
-        <Container fluid={true}>
+        <Container className={'statistics-modal-container'}>
             {statistics.length > 0 ?
                 <BarChart
                     data={statistics}
-                    width={730} height={450}
+                    width={930} height={500}
                 >
                     <CartesianGrid strokeDasharray="1 3" />
                     <XAxis dataKey="grade" />
@@ -68,7 +79,7 @@ const GradeTypeStatistics = (props: IGradeTypeStatistics) => {
                     <Tooltip content={<CustomTooltip />} />
                     <Bar dataKey="count" fill="#7162D9" />
                 </BarChart>
-                : <h3>Ładowanie</h3> }
+                : getLoading() }
         </Container>
     );
 

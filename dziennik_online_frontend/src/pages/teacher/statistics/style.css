@@ -1,3 +1,13 @@
+.statistics-modal-container {
+    display: flex;
+    justify-content: center;
+}
+
+.statistics-modal-container .loading {
+    width: 100px;
+    height: 100px;
+}
+
 .statistic-chart {
     width: 40%;
     height: auto;

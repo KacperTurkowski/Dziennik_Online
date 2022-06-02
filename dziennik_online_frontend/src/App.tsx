@@ -8,9 +8,10 @@ import useAuth from "./context/AuthContext/useAuth";
 import { Role } from "./interfaces/UserInterface";
 import Login from './pages/login/Login';
 import NoMatch from "./pages/nomatch/NoMatch";
-import Dashboard from "./pages/teacher/dashboard/Dashboard";
-import GradeTypeStatistics from "./pages/teacher/statistics/GradeTypeStatistics";
+import {Dashboard as TeacherDashboard} from "./pages/teacher/dashboard/Dashboard";
+import {Dashboard as StudentDashboard} from "./pages/student/dashboard/Dashboard";
 import Subject from "./pages/teacher/subjects/subjectPage/Subject";
+import {Subject as StudentSubject} from "./pages/student/subjects/subjectPage/Subject";
 import SubjectsList from './pages/teacher/subjects/SubjectsList';
 
 const App = (): JSX.Element => {
@@ -54,7 +55,7 @@ const App = (): JSX.Element => {
                         </PrivateRoute>
                     }
                 >
-                    <Route index element={<Dashboard/>}/>
+                    <Route index element={<TeacherDashboard/>}/>
                     <Route path="przedmioty" element={<SubjectsList/>}/>
                     <Route path="przedmioty/:subject" element={<Subject/>}/>
                     <Route path="*" element={<NoMatch/>}/>
@@ -67,6 +68,8 @@ const App = (): JSX.Element => {
                         </PrivateRoute>
                     }
                 >
+                    <Route index element={<StudentDashboard />}/>
+                    <Route path="przedmioty/:subject" element={<StudentSubject />}/>
                     <Route path="*" element={<NoMatch/>}/>
                 </Route>
                 <Route path="/login" element={<Login/>}/>
