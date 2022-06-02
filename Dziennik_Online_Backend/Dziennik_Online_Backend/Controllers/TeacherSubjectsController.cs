@@ -1,4 +1,5 @@
-﻿using Dziennik_Online_Backend.Services;
+﻿using Dziennik_Online_Backend.Models;
+using Dziennik_Online_Backend.Services;
 using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
@@ -13,9 +14,9 @@ public class TeacherSubjectsController
     }
 
     [HttpPost]
-    public IActionResult GetSubjectsForTeacher([FromBody] Guid guid)
+    public IActionResult GetSubjectsForTeacher([FromBody] GuidModel guid)
     {
-        var classes = _service.GetListOfClasses(guid);
+        var classes = _service.GetListOfClasses(guid.Guid);
         return new OkObjectResult(classes);
     }
 
