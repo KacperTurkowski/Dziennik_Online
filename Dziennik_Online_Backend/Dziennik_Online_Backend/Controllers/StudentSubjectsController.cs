@@ -1,4 +1,5 @@
-﻿using Dziennik_Online_Backend.Services;
+﻿using Dziennik_Online_Backend.Models;
+using Dziennik_Online_Backend.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Dziennik_Online_Backend.Repositories
@@ -16,11 +17,11 @@ namespace Dziennik_Online_Backend.Repositories
         }
 
         [HttpPost]
-        public IActionResult GetSubjectsForStudent([FromBody] Guid guid)
+        public IActionResult GetSubjectsForStudent([FromBody] GuidModel guid)
         {
             try
             {
-                var classes = _service.GetListOfClasses(guid);
+                var classes = _service.GetListOfClasses(guid.Guid);
                 return new OkObjectResult(classes);
             }
             catch (UnauthorizedAccessException)

@@ -47,7 +47,10 @@ namespace Dziennik_Online_Backend.Controllers
         {
             try
             {
-                return new OkObjectResult(_studentStatisticsService.GetAverageForStudent(averageForStudent));
+                return new OkObjectResult(new AverageModel
+                {
+                    Average = _studentStatisticsService.GetAverageForStudent(averageForStudent)
+                });
             }
             catch (UnauthorizedAccessException)
             {

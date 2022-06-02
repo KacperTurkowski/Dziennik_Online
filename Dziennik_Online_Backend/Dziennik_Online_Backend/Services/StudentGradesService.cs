@@ -47,7 +47,8 @@ namespace Dziennik_Online_Backend.Services
                 Id = grade.Id,
                 Value = grade.Value,
                 Date = grade.TimeStamp,
-                Weight = gradeType.Weight
+                Weight = gradeType.Weight,
+                GradeName = grade.GradeType.Name
             };
         }
         public List<GradeDetailInfo> GetStudentReport(Guid guid)
@@ -59,7 +60,8 @@ namespace Dziennik_Online_Backend.Services
                 Id = grade.Id,
                 Value = grade.Value,
                 Date = grade.TimeStamp,
-                Weight = grade.GradeType.Weight
+                Weight = grade.GradeType.Weight,
+                GradeName = grade.GradeType.Name
             }).ToList();
         }
     }
