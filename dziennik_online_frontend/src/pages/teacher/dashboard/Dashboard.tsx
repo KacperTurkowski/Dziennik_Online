@@ -1,7 +1,11 @@
-const Dashboard = (): JSX.Element => {
+import useAuth from "../../../context/AuthContext/useAuth";
+
+export const Dashboard = (): JSX.Element => {
+    const {user} = useAuth();
+
     return (
-        <>Dashboard Teacher</>
+        <>
+            <h4>Witaj {user?.firstName} {user?.lastName}</h4>
+        </>
     )
 }
-
-export default Dashboard;

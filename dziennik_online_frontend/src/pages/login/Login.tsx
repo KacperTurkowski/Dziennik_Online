@@ -1,24 +1,27 @@
-import './style/style.css';
 import React, { SyntheticEvent, useEffect, useState } from 'react';
-import {Container, Card, Button} from 'react-bootstrap';
+import { Button, Card, Container } from 'react-bootstrap';
 import * as Icon from 'react-bootstrap-icons';
 import { useNavigate } from "react-router-dom";
-import { loginApi, loginFakeApi } from "../../services/authorization";
+import Loading from "../../components/loading/Loading";
 import useAuth from "../../context/AuthContext/useAuth";
+import { loginApi } from "../../services/authorization";
 import ErrorMessage from './components/ErrorMessage';
 import FormInput from './components/FormInput';
+import './style/style.css';
 
 const Login = (): JSX.Element => {
-    const [username, setUsername] = useState<string | null>('');
-    const [password, setPassword] = useState<string | null>('');
+    const [username, setUsername] = useState<string|null>('');
+    const [password, setPassword] = useState<string|null>('');
     const [showError, setShowError] = useState<boolean>(false);
+    const [isPending, setIsPending] = useState<boolean>(false);
+
     const {user, onLogin} = useAuth();
     const navigate = useNavigate()
 
     useEffect(() => {
-       if (user !== null) {
-           navigate('/');
-       }
+        if ( user !== null ) {
+            navigate('/');
+        }
     });
 
     useEffect(() => {
@@ -28,7 +31,7 @@ const Login = (): JSX.Element => {
     const handleUserName = (event: SyntheticEvent) => {
         const value: string = (event.target as HTMLInputElement).value;
 
-        if (value !== '') {
+        if ( value !== '' ) {
             setUsername(value);
             return;
         }
@@ -38,7 +41,7 @@ const Login = (): JSX.Element => {
     const handlePassword = (event: SyntheticEvent) => {
         const value: string = (event.target as HTMLInputElement).value;
 
-        if (value !== '') {
+        if ( value !== '' ) {
             setPassword(value);
             return;
         }
@@ -48,12 +51,15 @@ const Login = (): JSX.Element => {
     const handleSubmit = async (event: SyntheticEvent) => {
         event.preventDefault();
 
-        if (!!username && !!password) {
+        if ( !!username && !!password ) {
             try {
-                const data = await loginFakeApi();
+                setIsPending(true);
+                const data = await loginApi(username, password);
                 onLogin(data);
             } catch (e) {
                 setShowError(true);
+            } finally {
+                setIsPending(false);
             }
         } else {
             setUsername(null);
@@ -61,8 +67,19 @@ const Login = (): JSX.Element => {
         }
     }
 
+    const getOverlayLoading = () => {
+        return (
+            <div className={'overlay'}>
+                <div className={'loading'}>
+                    <Loading />
+                </div>
+            </div>
+        )
+    }
+
     return (
         <Container fluid={true} className={'login-page'}>
+            {isPending && getOverlayLoading()}
             <Container className={'login-page-container'}>
                 <Card className={'login-form-card'}>
                     <Card.Body>
@@ -74,7 +91,7 @@ const Login = (): JSX.Element => {
                                 onBlurFn={handleUserName}
                                 type={'text'}
                                 validation={username === null}
-                                icon={<Icon.PersonFill />}
+                                icon={<Icon.PersonFill/>}
                             />
                             <FormInput
                                 id={'password'}
@@ -82,9 +99,9 @@ const Login = (): JSX.Element => {
                                 onBlurFn={handlePassword}
                                 type={'password'}
                                 validation={password === null}
-                                icon={<Icon.Lock />}
+                                icon={<Icon.Lock/>}
                             />
-                            {showError && <ErrorMessage />}
+                            {showError && <ErrorMessage/>}
                             <Button onClick={handleSubmit}>Zaloguj</Button>
                         </div>
                     </Card.Body>

@@ -1,11 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import * as Icon from "react-bootstrap-icons";
 import {useNavigate } from 'react-router-dom';
 import useAuth from "../../context/AuthContext/useAuth";
 import './styles.css'
-import { SubjectInterface } from "../../interfaces/SubjectInterface";
-import { getFakeTeacherSubjects } from "../../services/teacherSubjects";
-import NavItem from "./NavItem";
 
 interface INavMenu {
     navItems: JSX.Element;
