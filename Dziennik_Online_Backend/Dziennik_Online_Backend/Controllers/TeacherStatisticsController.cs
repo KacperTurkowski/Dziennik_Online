@@ -1,4 +1,5 @@
 ﻿using Dziennik_Online_Backend.Models;
+using Dziennik_Online_Backend.Models.Student;
 using Dziennik_Online_Backend.Models.Teacher;
 using Dziennik_Online_Backend.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -45,7 +46,10 @@ public class TeacherStatisticsController
     {
         try
         {
-            return new OkObjectResult(_teacherStatisticsService.GetAverageForStudent(averageForStudent));
+            return new OkObjectResult(new AverageModel
+            {
+                Average = _teacherStatisticsService.GetAverageForStudent(averageForStudent)
+            });
         }
         catch (UnauthorizedAccessException)
         {
