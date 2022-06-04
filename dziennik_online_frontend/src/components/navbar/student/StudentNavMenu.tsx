@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import * as Icon from "react-bootstrap-icons";
 import useAuth from "../../../context/AuthContext/useAuth";
+import useStudent from "../../../context/StudentContext/useStudent";
 import { SubjectInterface } from "../../../interfaces/SubjectInterface";
 import { getStudentSubjects } from "../../../services/studentApi";
 import Loading from "../../loading/Loading";
@@ -8,23 +9,15 @@ import NavItem from "../NavItem";
 import NavMenu from "../NavMenu";
 
 const StudentNavMenu = () => {
-    const [subjects, setSubjects] = useState<SubjectInterface[]>();
     const {user} = useAuth();
+    const {subjects, saveSubjects} = useStudent();
 
     useEffect( () => {
         const guidUser: string = user?.guid || '';
 
         getStudentSubjects(guidUser)
             .then(subjects => {
-                const subjectList = subjects.map((subject: any) => {
-                    return {
-                        id: subject['id'],
-                        classId: subject['classId'],
-                        title: subject['schoolSubjectName'],
-                        link: `przedmioty/${subject['id']}`
-                    }
-                })
-                setSubjects(subjectList)
+                saveSubjects(subjects);
             })
     }, [])
 
@@ -38,7 +31,8 @@ const StudentNavMenu = () => {
 
     const getNavItems = (): JSX.Element => {
         return (
-            <> <NavItem icon={<Icon.HouseFill/>} link={'/student'} title={'Główna'}/>
+            <>
+                <NavItem icon={<Icon.HouseFill/>} link={'/student'} title={'Główna'}/>
                 <li key={'przedmioty'} className='list-item list-item-category'>
                     <div>
                         <p id="icon"><Icon.ListUl/></p>

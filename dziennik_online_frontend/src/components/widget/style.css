@@ -1,0 +1,8 @@
+.widget {
+    box-shadow: 5px 10px 10px -8px rgba(66, 68, 90, 1);
+}
+
+.widget-header {
+    text-align: right;
+    margin-bottom: 40px;
+}

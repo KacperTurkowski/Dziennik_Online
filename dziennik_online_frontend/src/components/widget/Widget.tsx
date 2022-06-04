@@ -1,15 +1,17 @@
 import { Col, Container, Row, Card, Table } from "react-bootstrap";
+import './style.css';
 
 interface IWidget {
     header: string;
-    children?: JSX.Element,
+    icon?: JSX.Element;
+    children?: JSX.Element;
 }
 
-export const Widget = ({ header, children }: IWidget): JSX.Element => {
+export const Widget = ({ header, icon, children }: IWidget): JSX.Element => {
     return (
         <Card body className={'widget'}>
             <div className={'widget-header'}>
-                <h6>{header}</h6>
+                <h6>{icon} {header}</h6>
             </div>
             {children}
         </Card>
