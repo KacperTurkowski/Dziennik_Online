@@ -1,5 +1,5 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 
 interface INavItem {
     link: string;
@@ -11,7 +11,12 @@ const NavItem = ({link, title, icon}: INavItem): JSX.Element => {
     const navigate = useNavigate();
 
     return (
-        <li className={'list-item'} onClick={() => {navigate(`${link}`)}}>
+        <li
+            className={`list-item`}
+            onClick={() => {
+                navigate(`${link}`)
+            }
+        }>
             <div>
                 <p id="icon">{icon}</p>
                 <p id="title">{title}</p>

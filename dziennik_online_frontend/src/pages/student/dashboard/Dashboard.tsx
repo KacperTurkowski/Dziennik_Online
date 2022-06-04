@@ -1,7 +1,9 @@
+import React from "react";
 import { Col, Container, Row, Card, Table } from "react-bootstrap";
+import * as Icon from "react-bootstrap-icons";
+import { Widget } from "../../../components/widget/Widget";
 import useAuth from "../../../context/AuthContext/useAuth";
 import { LatestGrades } from "./LatestGrades";
-import { Widget } from "./Widget";
 import './style.css';
 
 export const Dashboard = (): JSX.Element => {
@@ -14,7 +16,7 @@ export const Dashboard = (): JSX.Element => {
             </Row>
             <Row>
                 <Col md={8}>
-                    <Widget header={'Ostatnio otrzymane oceny'}>
+                    <Widget header={'Ostatnio otrzymane oceny'} icon={<Icon.SendPlus />}>
                         <LatestGrades />
                     </Widget>
 

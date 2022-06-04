@@ -1,0 +1,33 @@
+.student-grades-row {
+    position: relative;
+    min-height: 200px;
+    margin-bottom: 50px;
+}
+
+.student-grades-row .loading {
+    position: relative;
+    top: 40%;
+    left: 50%;
+    width: 100px;
+    height: 100px;
+}
+
+.student-grades-table tr td, .student-grades-table thead th {
+    text-align: center;
+}
+
+.student-grades-table tbody tr th {
+    cursor: pointer;
+}
+
+.student-grades-table .badge {
+    cursor: pointer;
+    padding: 8px;
+}
+.student-grades-table tr td:hover {
+     background: rgba(0, 0, 0, 0.075);
+ }
+
+.grade-popover-row {
+    padding: 10px;
+}
