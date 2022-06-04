@@ -31,7 +31,7 @@ namespace Dziennik_Online_Backend.Services
             return new AverageForGradeTypeResult
             {
                 Average = data.Average(x => x.Value),
-                Median = GetMedian(data.Select(x => x.Value).ToList())
+                Median = AverageHelper.GetMedian(data.Select(x => x.Value).ToList())
             };
         }
 
@@ -47,39 +47,16 @@ namespace Dziennik_Online_Backend.Services
             {
                 Count = x.Count(),
                 Grade = x.Key
-            }).ToList();
+            }).OrderBy(x => x.Grade).ToList();
         }
 
         public double GetAverageForStudent(StudentAverage averageForStudent)
         {
             var grades = _studentStatisticsRepository
                 .GetGradesForStudent(averageForStudent.StudentGuid, averageForStudent.SchoolSubjectId);
-            return GetWeightedAverage(grades);
+            return AverageHelper.GetWeightedAverage(grades);
         }
 
-        private double GetWeightedAverage(List<Grade> grades)
-        {
-            if (grades == null || grades.Count == 0)
-                return 0;
-            var counter = 0;
-            var denominator = 0;
-            foreach (var grade in grades)
-            {
-                counter += grade.Value * grade.GradeType.Weight;
-                denominator += grade.GradeType.Weight;
-            }
-            return counter/denominator;
-        }
 
-        private double GetMedian(List<int> grades)
-        {
-            if (grades.Count == 0)
-                return 0;
-
-            var index = grades.Count / 2;
-            return grades.Count % 2 == 0
-                ? (grades[index] + grades[index - 1]) / 2.0
-                : grades[index];
-        }
     }
 }

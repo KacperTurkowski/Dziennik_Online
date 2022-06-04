@@ -24,7 +24,7 @@ public class TeacherStatisticsService : ITeacherStatisticsService
         return new AverageForGradeTypeResult
         {
             Average = data.Average(x => x.Value),
-            Median = GetMedian(data.Select(x=>x.Value).ToList())
+            Median = AverageHelper.GetMedian(data.Select(x=>x.Value).ToList())
         };
     }
 
@@ -46,7 +46,7 @@ public class TeacherStatisticsService : ITeacherStatisticsService
                     Name = x.User.Name, 
                     Surname = x.User.Surname
                 }).ToList()
-            }).ToList();
+            }).OrderBy(x=>x.Grade).ToList();
     }
 
     public double GetAverageForStudent(AverageForStudent averageForStudent)
@@ -56,30 +56,6 @@ public class TeacherStatisticsService : ITeacherStatisticsService
 
         var grades = _teacherStatisticsRepository.GetGradesForStudentSchool(averageForStudent.StudentLogin,
             averageForStudent.SchoolSubjectId);
-        return GetWeightedAverage(grades);
-    }
-    private double GetWeightedAverage(List<Grade> grades)
-    {
-        if (grades == null || grades.Count == 0)
-            return 0;
-        var counter = 0;
-        var denominator = 0;
-        foreach (var grade in grades)
-        {
-            counter += grade.Value * grade.GradeType.Weight;
-            denominator += grade.GradeType.Weight;
-        }
-        return counter / denominator;
-    }
-
-    private double GetMedian(List<int> grades)
-    {
-        if (grades.Count == 0)
-            return 0;
-
-        var index = grades.Count / 2;
-        return grades.Count % 2 == 0 
-            ? (grades[index] + grades[index - 1]) / 2.0 
-            : grades[index];
+        return AverageHelper.GetWeightedAverage(grades);
     }
 }
