@@ -1,20 +1,22 @@
 import React, { useEffect, useState } from "react";
-import { Container, Row, Table, Badge, Col } from "react-bootstrap";
+import { Col, Container, Row, Table } from "react-bootstrap";
 import * as Icon from "react-bootstrap-icons";
-import { useParams } from "react-router-dom";
-import Loading from "../../../../components/loading/Loading";
+import { useNavigate, useParams } from "react-router-dom";
 import { Widget } from "../../../../components/widget/Widget";
 import useAuth from "../../../../context/AuthContext/useAuth";
 import useStudent from "../../../../context/StudentContext/useStudent";
 import { getStudentAllGrades, getStudentAvgGradeForSubject } from "../../../../services/studentApi";
+import { AverageWidget } from "./AverageWidget";
+import { Grade } from "./Grade";
+import { Loader } from "./Loader";
+import ModalWithStatistics from "./statistics/ModalWithStatistics";
 
 import './style.css'
-import { Grade } from "./Grade";
-import ModalWithStatistics from "./statistics/ModalWithStatistics";
 
 export const Subject = (): JSX.Element => {
     const {subject} = useParams();
     const {user} = useAuth();
+    const navigate = useNavigate()
     const {actualSubject, setActualSubject} = useStudent();
     const [grades, setGrades] = useState<any[]>([]);
     const [avgGrade, setAvgGrade] = useState<number>(0);
@@ -30,27 +32,19 @@ export const Subject = (): JSX.Element => {
         setAvgGrade(0);
 
         getStudentAllGrades(subjectId, guid)
-            .then(grades => {
-                setGrades(grades);
-            })
+            .then(grades => setGrades(grades))
+            .catch(error => navigate('nomatch'))
 
         getStudentAvgGradeForSubject(Number(subject), guid)
             .then(avgGrade => setAvgGrade(Number(avgGrade['average'])))
+            .catch(error => navigate('nomatch'))
 
     }, [subject])
-
-    const getLoading = () => {
-        return (
-            <div className={'loading'}>
-                <Loading/>
-            </div>
-        )
-    }
 
     return (
         <Container fluid className={'students-subject'}>
             <Row className={'title-row'}>
-                <h4>{actualSubject && actualSubject.title}</h4>
+                <h4 className="display-6">{actualSubject && actualSubject.title}</h4>
             </Row>
 
             <Row className={'student-grades-row'}>
@@ -67,8 +61,8 @@ export const Subject = (): JSX.Element => {
                                 </tr>
                                 </thead>
                                 <tbody>
-                                {grades.map(grade =>
-                                    <tr>
+                                {grades.map((grade, index) =>
+                                    <tr key={index}>
                                         <th
                                             onClick={() => {
                                                 setActiveGradeId(grade['gradeTypeId'])
@@ -77,21 +71,17 @@ export const Subject = (): JSX.Element => {
                                         >
                                             {grade['gradeTypeName']}
                                         </th>
-                                        <td><Grade grade={grade['gradeData']} /></td>
-                                        <td>{grade['average']}</td>
-                                        <td>{grade['median']}</td>
+                                        <td><Grade grade={grade['gradeData']}/></td>
+                                        <td>{Number(grade['average']).toPrecision(3)}</td>
+                                        <td>{Number(grade['median']).toPrecision(3)}</td>
                                     </tr>
                                 )}
                                 </tbody>
-                            </Table> : getLoading()}
+                            </Table> : <Loader/>}
                     </Widget>
                 </Col>
                 <Col md={2} className={'student-average'}>
-                    <Widget header={'Średnia z przedmiotu'} icon={<Icon.MortarboardFill/>}>
-                        <div>{avgGrade > 0 ?
-                            <h1 className={'text-center'}>{avgGrade}</h1>
-                            : getLoading()}</div>
-                    </Widget>
+                    <AverageWidget avgGrade={avgGrade}/>
                 </Col>
             </Row>
 

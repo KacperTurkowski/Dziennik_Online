@@ -34,9 +34,7 @@ export const Grade = ({grade}: IGrade): JSX.Element => {
                 trigger="click"
                 key={'left'}
                 placement={'left'}
-                overlay={
-                    getGradePopover()
-                }
+                overlay={getGradePopover()}
             >
                 <Badge bg={gradeColor}>{grade['value']}</Badge>
             </OverlayTrigger>

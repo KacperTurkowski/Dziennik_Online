@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Col, Container, Row } from "react-bootstrap";
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import './style.css';
+import { Container } from "react-bootstrap";
+import { Bar, BarChart, CartesianGrid, Tooltip, XAxis, YAxis } from 'recharts';
 import Loading from "../../../../../components/loading/Loading";
 import useAuth from "../../../../../context/AuthContext/useAuth";
 import { getStudentChartData } from "../../../../../services/studentApi";
-import {getStatisticsGradeTypeId} from "../../../../../services/teacherSubjects";
+import './style.css';
 
 interface IGradeTypeStatistics {
     gradeTypeId: number
@@ -18,7 +17,7 @@ const GradeTypeStatistics = (props: IGradeTypeStatistics) => {
     useEffect(() => {
         const guid = user?.guid || '';
 
-        getStudentChartData(props.gradeTypeId ,guid)
+        getStudentChartData(props.gradeTypeId, guid)
             .then(statistics => {
                 const preparedStatistics = statistics.map((statistic: any) => {
                     return {
@@ -30,10 +29,22 @@ const GradeTypeStatistics = (props: IGradeTypeStatistics) => {
             })
     }, [])
 
+    const CustomTooltip = ({active, payload, label}: any) => {
+        if ( active && payload && payload.length ) {
+            return (
+                <div className="custom-tooltip">
+                    Liczba osób, które otrzymały ocene {label} : <strong>{payload[0].value}</strong>
+                </div>
+            );
+        }
+
+        return null;
+    };
+
     const getLoading = () => {
         return (
             <div className={'loading'}>
-                <Loading />
+                <Loading/>
             </div>
         )
     }
@@ -45,13 +56,13 @@ const GradeTypeStatistics = (props: IGradeTypeStatistics) => {
                     data={statistics}
                     width={930} height={500}
                 >
-                    <CartesianGrid strokeDasharray="1 3" />
-                    <XAxis dataKey="grade" />
-                    <YAxis />
-                    <Tooltip />
-                    <Bar dataKey="count" fill="#7162D9" />
+                    <CartesianGrid strokeDasharray="1 3"/>
+                    <XAxis dataKey="grade"/>
+                    <YAxis/>
+                    <Tooltip content={<CustomTooltip/>}/>
+                    <Bar dataKey="count" fill="#7162D9"/>
                 </BarChart>
-                : getLoading() }
+                : getLoading()}
         </Container>
     );
 
