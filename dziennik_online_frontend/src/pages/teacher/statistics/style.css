@@ -35,3 +35,21 @@ span.grade:after {
 span.grade:last-of-type:after {
   content: "";
 }
+
+.grade-cell-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.grade-cell {
+  justify-content: flex-end;
+  display: flex;
+  align-items: center;
+}
+
+.grade-cell-start {
+  justify-content: flex-start;
+  display: flex;
+  align-items: center;
+}

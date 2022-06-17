@@ -16,36 +16,36 @@ const AddGradeTypeForm = (props: GradeInterface) => {
 
   const [gradeTypeName, setGradeTypeNameToAdd] = useState("");
   const [gradeTypWeight, setGradeTypeWeightToAdd] = useState(0);
-  const [gradeDetailsToAdd, setGradeDetailsToAdd] = useState({
+  const [gradeDetailsToAdd, setGradeDetailsToAdd] = useState([{
     commentary: "",
     value: 0,
     studentId: 0,
-  });
+  }]);
 
   function handleChangeValue(event: any) {
-    const gradeDetailsToAddTemp = {
-      commentary: gradeDetailsToAdd.commentary,
+    const gradeDetailsToAddTemp = [{
+      commentary: gradeDetailsToAdd[0].commentary,
       value: Number(event.target.value),
-      studentId: gradeDetailsToAdd.studentId,
-    };
+      studentId: gradeDetailsToAdd[0].studentId,
+    }];
     setGradeDetailsToAdd(gradeDetailsToAddTemp);
   }
 
   function handleChangeCommentary(event: any) {
-    const gradeDetailsToAddTemp = {
+    const gradeDetailsToAddTemp = [{
       commentary: event.target.value.toString(),
-      value: gradeDetailsToAdd.value,
-      studentId: gradeDetailsToAdd.studentId,
-    };
+      value: gradeDetailsToAdd[0].value,
+      studentId: gradeDetailsToAdd[0].studentId,
+    }];
     setGradeDetailsToAdd(gradeDetailsToAddTemp);
   }
 
   function handleChangeStudentId(event: any) {
-    const gradeDetailsToAddTemp = {
-      commentary: gradeDetailsToAdd.commentary,
-      value: gradeDetailsToAdd.value,
+    const gradeDetailsToAddTemp =[{
+      commentary: gradeDetailsToAdd[0].commentary,
+      value: gradeDetailsToAdd[0].value,
       studentId: Number(event.target.value),
-    };
+    }];
     setGradeDetailsToAdd(gradeDetailsToAddTemp);
   }
 
@@ -63,7 +63,7 @@ const AddGradeTypeForm = (props: GradeInterface) => {
       gradeTypWeight,
       currentUserGuid,
       currentSubjectId,
-      gradeDetailsToAdd
+      gradeDetailsToAdd[0]
     );
     event.preventDefault();
   }

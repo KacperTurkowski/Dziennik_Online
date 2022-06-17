@@ -8,6 +8,8 @@ import { StudentsGrades } from "../../helper";
 import AddGradeTypeForm from "../AggGradeType";
 import { Grade } from "../Grade";
 import ButtonModal from "../../statistics/ButtonModal";
+import GradeButtonModal from "../../statistics/GradeButtonModal";
+import * as Icon from "react-bootstrap-icons";
 
 const Subject = (): JSX.Element => {
   const { subject } = useParams();
@@ -73,51 +75,83 @@ const Subject = (): JSX.Element => {
             <th>Imie i Nazwisko</th>
             {studentsGrades?.gradeTypes.map((subject) => (
               <th key={subject.gradeTypeId}>
-                {subject.name} {`(${subject.gradeTypeId})`} {' '}
-                <ButtonModal
-                  gradeTypeId={subject.gradeTypeId}
-                  userGuid={userGuid}
-                  gradeTypeName={subject.name}
-                />
+                <div className="grade-cell-heading">
+                  <span>{subject.name}</span>
+                  <ButtonModal
+                    gradeTypeId={subject.gradeTypeId}
+                    userGuid={userGuid}
+                    gradeTypeName={subject.name}
+                  />
+                </div>
               </th>
             ))}
+            <th>
+              <input style={{ width: "100%" }} placeholder="Nowy Typ Oceny" />
+            </th>
           </tr>
         </thead>
         <tbody>
-          {studentsGrades?.students.map((student) => (
-            <>
-              <tr key={student.id}>
-                <td>
-                  {student.name} {student.surname}
-                </td>
-                {studentsGrades?.gradeTypeWithGrades.map((item) => (
-                  <>
-                    <td style={{ textAlign: "center" }}>
-                      {item.grades
-                        .filter((grade) => grade.userId === student.id)
-                        .map((grade) => (
-                            <Grade grade={grade} gradeTypeId={item.gradeTypeId} />
-                        ))}
-                    </td>
-                  </>
-                ))}
-              </tr>
-              <tr/>
-            </>
-          ))}
+          {studentsGrades?.students.map((student) => {
+            return (
+              <>
+                <tr key={student.id}>
+                  <td>
+                    {student.name} {student.surname}
+                  </td>
+                  {studentsGrades?.gradeTypeWithGrades.map((item) => {
+                    const userGrade = item.grades.filter(
+                      (grade) => grade.userId === student.id
+                    );
+                    return (
+                      <>
+                        <td style={{ textAlign: "center" }}>
+                          <div className="grade-cell">
+                            <div>
+                              {userGrade.map((grade) => (
+                                  <Grade grade={grade} gradeTypeId={item.gradeTypeId} />
+                              ))}
+                            </div>
+                            {userGrade.length === 0 && (
+                              <GradeButtonModal
+                                userId={student.id}
+                                userGuid={userGuid}
+                                gradeTypeId={item.gradeTypeId}
+                              />
+                            )}
+                          </div>
+                        </td>
+                      </>
+                    );
+                  })}
+                  <td className="grade-cell">
+                    <input placeholder={"np. 3"} maxLength={1} style={{ width: "80px" }}></input>
+                    <input placeholder={"np. komentarz"} maxLength={1} style={{ width: "100px" }}></input>
+
+                  </td>
+                </tr>
+                <tr></tr>
+              </>
+            );
+          })}
         </tbody>
+        <tfoot>
+          <Button
+            style={{ margin: "10px" }}
+            variant="primary"
+            onClick={() => setDeleteGrade(true)}
+          >
+            Dodaj wage
+          </Button>
+          <Button
+            style={{ margin: "10px" }}
+            variant="primary"
+            //  onClick={() => setDeleteGrade(true)}
+          >
+            Zapisz
+          </Button>
+        </tfoot>
       </table>
-      <span>
-        <Button
-          style={{ margin: "10px" }}
-          variant="primary"
-          onClick={() => setAddGrade(true)}
-        >
-          Dodaj Ocene
-        </Button>
-        <AddForm show={AddGradeShow} onHide={() => setAddGrade(false)} />
-      </span>
-      <span>
+      {/* <span>
         <Button
           style={{ margin: "10px" }}
           variant="primary"
@@ -129,7 +163,7 @@ const Subject = (): JSX.Element => {
           show={AddGradeTypeShow}
           onHide={() => setAddGradeType(false)}
         />
-      </span>
+      </span> */}
     </>
   );
 };

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { MouseEventHandler, useState } from "react";
 import { Button, Modal, Form } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import useAuth from "../../../context/AuthContext/useAuth";
@@ -6,15 +6,19 @@ import { addGrade } from "../../../services/teacherSubjects";
 import { GradeInterface } from "../helper";
 //import { Form } from 'semantic-ui-react'
 
-const AddForm = (props: GradeInterface) => {
-  const { onHide, show } = props;
+export interface GradeInterfaceProps {
+  onHide: MouseEventHandler;
+  show: boolean;
+  gradeTypeId: number,
+  userId: number,
+}
 
+const AddForm = (props: GradeInterfaceProps) => {
+  const { onHide, show, userId, gradeTypeId } = props;
   const { subject } = useParams();
   const { user } = useAuth();
   const currentUserGuid: string = user?.guid ?? "";
   const currentSubjectId: number = Number(subject);
-  const [studentIDToAdd, setStudentIDToAdd] = useState(0);
-  const [gradeTypeIDToAdd, setGradeTypeIDToAdd] = useState(0);
   const [commentaryToAdd, setCommentaryToAdd] = useState("");
   const [valueToAdd, setValueToAdd] = useState(0);
 
@@ -25,23 +29,14 @@ const AddForm = (props: GradeInterface) => {
   function handleChangeValue(event: any) {
     setValueToAdd(Number(event.target.value));
   }
-
-  function handleChangeStudentId(event: any) {
-    setStudentIDToAdd(Number(event.target.value));
-  }
-
-  function handleChangeGradeTypeId(event: any) {
-    setGradeTypeIDToAdd(Number(event.target.value));
-  }
-
   function handleSubmit(event: any) {
     addGrade(
+      currentUserGuid,
+      currentSubjectId,
       commentaryToAdd,
       valueToAdd,
-      currentUserGuid,
-      studentIDToAdd,
-      currentSubjectId,
-      gradeTypeIDToAdd
+      userId,
+      gradeTypeId,
     );
     event.preventDefault();
   }
@@ -71,32 +66,12 @@ const AddForm = (props: GradeInterface) => {
               onChange={handleChangeCommentary}
             />
           </div>
-          <div style={{ margin: "5px" }} className="form-group">
-            <small>ID Studenta</small>
-            <Form.Control
-              type="text"
-              className="form-control"
-              id="studentId"
-              placeholder="np. 1111"
-              onChange={handleChangeStudentId}
-            />
-          </div>
-          <div style={{ margin: "5px" }} className="form-group">
-            <small>ID Rodzaju Oceny </small>
-            <Form.Control
-              type="text"
-              className="form-control"
-              id="gradeTypeId"
-              placeholder="np. 9999"
-              onChange={handleChangeGradeTypeId}
-            />
-          </div>
           <button
             type="submit"
             className="btn btn-primary"
             style={{ marginTop: "10px" }}
           >
-            Submit
+            Zapisz
           </button>
         </Form>
       </Modal.Body>

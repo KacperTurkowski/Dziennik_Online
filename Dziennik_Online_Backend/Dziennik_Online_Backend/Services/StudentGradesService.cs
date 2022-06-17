@@ -24,7 +24,7 @@ namespace Dziennik_Online_Backend.Services
                     GradeTypeName = gradeType.Name,
                     Value = grades.ContainsKey(gradeType.Id) ? grades[gradeType.Id].Value.ToString() ?? "-" : "-",
                     GradeTypeId = gradeType.Id,
-                    GradeId = grades[gradeType.Id].Id
+                    GradeId = grades.ContainsKey(gradeType.Id) ? grades[gradeType.Id].Id : -1
                 });
             }
 
