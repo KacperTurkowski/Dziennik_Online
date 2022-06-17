@@ -2,11 +2,18 @@ import React, { useEffect, useState } from "react";
 import * as Icon from "react-bootstrap-icons";
 import useAuth from "../../../context/AuthContext/useAuth";
 import useStudent from "../../../context/StudentContext/useStudent";
-import { SubjectInterface } from "../../../interfaces/SubjectInterface";
 import { getStudentSubjects } from "../../../services/studentApi";
 import Loading from "../../loading/Loading";
 import NavItem from "../NavItem";
 import NavMenu from "../NavMenu";
+
+export const getLoading = () => {
+    return (
+        <div className={'loading'}>
+            <Loading />
+        </div>
+    )
+}
 
 const StudentNavMenu = () => {
     const {user} = useAuth();
@@ -20,14 +27,6 @@ const StudentNavMenu = () => {
                 saveSubjects(subjects);
             })
     }, [])
-
-    const getLoading = () => {
-        return (
-            <div className={'loading'}>
-                <Loading />
-            </div>
-        )
-    }
 
     const getNavItems = (): JSX.Element => {
         return (

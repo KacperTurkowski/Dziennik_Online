@@ -9,6 +9,7 @@ import {getStatisticsGradeTypeId} from "../../../services/teacherSubjects";
 interface IGradeTypeStatistics {
     userGuid: string,
     gradeTypeId: number
+    gradeTypeName: string,
 }
 
 const GradeTypeStatistics = (props: IGradeTypeStatistics) => {
@@ -18,7 +19,7 @@ const GradeTypeStatistics = (props: IGradeTypeStatistics) => {
     useEffect(() => {
         const guid = user?.guid || '';
 
-        getStatisticsGradeTypeId('b08cf6dd-4793-482c-8eae-0d0823b678a9',1001)
+        getStatisticsGradeTypeId(props.userGuid,props.gradeTypeId)
             .then(statistics => {
                 const preparedStatistics = statistics.map((statistic: any) => {
                     return {
@@ -65,8 +66,9 @@ const GradeTypeStatistics = (props: IGradeTypeStatistics) => {
             </div>
         )
     }
-
     return (
+        <>
+        {props.gradeTypeName}
         <Container className={'statistics-modal-container'}>
             {statistics.length > 0 ?
                 <BarChart
@@ -81,6 +83,7 @@ const GradeTypeStatistics = (props: IGradeTypeStatistics) => {
                 </BarChart>
                 : getLoading() }
         </Container>
+        </>
     );
 
 }
