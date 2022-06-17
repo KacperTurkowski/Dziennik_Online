@@ -26,9 +26,10 @@ namespace Dziennik_Online_Backend.Services
                 Students = students.Select(p => new StudentBasicInfo(p)).ToList(),
                 Subject = new SubjectInfo(schoolSubject, ClassNameProvider.GetClassName(schoolSubject.ClassId)),
                 GradeTypes = schoolSubject.GradeTypes.Select(p => new GradeIdTypeInfo(p)).ToList(),
-                GradeTypeWithGrades = schoolSubject.GradeTypes.Select(p => new GradeTypeBasicInfo()
+                GradeTypeWithGrades = schoolSubject.GradeTypes.Select(p => new GradeTypeBasicInfo
                 {
                     GradeTypeId = p.Id,
+                    Weight = p.Weight,
                     Grades = p.Grades.Select(g => new GradeBasicInfo(g)).ToList()
                 }).ToList()
             };
