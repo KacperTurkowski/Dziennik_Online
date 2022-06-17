@@ -1,6 +1,5 @@
 import axios from "axios";
 import { API_URL } from "../config/API_URL";
-import { getStatisticsForGradeTypeId, getTeacherSubject } from "../mocks/mocks";
 
 export const getTeacherSubjects = async (uuid: string) => {
     try {

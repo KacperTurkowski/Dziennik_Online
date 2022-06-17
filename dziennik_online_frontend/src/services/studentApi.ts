@@ -38,13 +38,20 @@ export const getStudentAllGrades = async (subjectId: number, uuid: string): Prom
             const {gradeId, gradeTypeId} = grade;
 
             const avgData = await getStudentAverageForGrade(gradeTypeId, uuid);
-            const gradeSpecific = await getStudentGradeSpecificInformation(gradeId, uuid);
+            if (gradeId > 0) {
+                const gradeSpecific = await getStudentGradeSpecificInformation(gradeId, uuid);
+                return {
+                    ...grade,
+                    ...avgData,
+                    gradeData: gradeSpecific
+                }
+            }
 
             return {
                 ...grade,
                 ...avgData,
-                gradeData: gradeSpecific
             }
+
         }));
     } catch (e) {
         throw e;

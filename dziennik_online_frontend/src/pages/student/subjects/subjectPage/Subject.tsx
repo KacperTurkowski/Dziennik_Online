@@ -19,7 +19,7 @@ export const Subject = (): JSX.Element => {
     const navigate = useNavigate()
     const {actualSubject, setActualSubject} = useStudent();
     const [grades, setGrades] = useState<any[]>([]);
-    const [avgGrade, setAvgGrade] = useState<number>(0);
+    const [avgGrade, setAvgGrade] = useState<number | null>(null);
     const [modalShow, setModalShow] = useState(false);
     const [activeGradeId, setActiveGradeId] = useState<number>(0);
 
@@ -29,7 +29,7 @@ export const Subject = (): JSX.Element => {
         const guid: string = user?.guid || '';
         const subjectId: number = Number(subject);
         setGrades([]);
-        setAvgGrade(0);
+        setAvgGrade(null);
 
         getStudentAllGrades(subjectId, guid)
             .then(grades => setGrades(grades))
@@ -71,7 +71,7 @@ export const Subject = (): JSX.Element => {
                                         >
                                             {grade['gradeTypeName']}
                                         </th>
-                                        <td><Grade grade={grade['gradeData']}/></td>
+                                        <td>{grade['gradeData'] ? <Grade grade={grade['gradeData']}/> : '---'}</td>
                                         <td>{Number(grade['average']).toPrecision(3)}</td>
                                         <td>{Number(grade['median']).toPrecision(3)}</td>
                                     </tr>
