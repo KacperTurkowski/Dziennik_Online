@@ -7,12 +7,14 @@ namespace Dziennik_Online_Backend.Models.Teacher
         public int Id { get; set; }
         public int Value { get; set; }
         public int UserId { get; set; }
+        public string Commentary { get; set; }
 
         public GradeBasicInfo(Grade grade)
         {
             Id = grade.Id;
             Value = grade.Value;
             UserId = grade.UserId;
+            Commentary = grade.Commentary;
         }
     }
 }
