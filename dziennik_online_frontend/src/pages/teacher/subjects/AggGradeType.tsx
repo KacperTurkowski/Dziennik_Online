@@ -1,13 +1,19 @@
-import React, { useState } from "react";
+import React, { MouseEventHandler, useState } from "react";
 import { Button, Modal, Form } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import useAuth from "../../../context/AuthContext/useAuth";
 import { addGradeType } from "../../../services/teacherSubjects";
-import { GradeInterface } from "../helper";
+//import { GradeInterface } from "../helper";
 //import { Form } from 'semantic-ui-react'
 
+export interface GradeInterface {
+  onHide: MouseEventHandler;
+  show: boolean;
+  // handleChangeGradeTypWeight: any;
+}
+
 const AddGradeTypeForm = (props: GradeInterface) => {
-  const { onHide, show } = props;
+  const { onHide, show} = props;
 
   const { subject } = useParams();
   const { user } = useAuth();
@@ -15,47 +21,52 @@ const AddGradeTypeForm = (props: GradeInterface) => {
   const currentSubjectId: number = Number(subject);
 
   const [gradeTypeName, setGradeTypeNameToAdd] = useState("");
-  const [gradeTypWeight, setGradeTypeWeightToAdd] = useState(0);
+   const [gradeTypWeight, setGradeTypeWeightToAdd] = useState(0);
   const [gradeDetailsToAdd, setGradeDetailsToAdd] = useState([{
     commentary: "",
     value: 0,
     studentId: 0,
   }]);
 
-  function handleChangeValue(event: any) {
-    const gradeDetailsToAddTemp = [{
-      commentary: gradeDetailsToAdd[0].commentary,
-      value: Number(event.target.value),
-      studentId: gradeDetailsToAdd[0].studentId,
-    }];
-    setGradeDetailsToAdd(gradeDetailsToAddTemp);
-  }
-
-  function handleChangeCommentary(event: any) {
-    const gradeDetailsToAddTemp = [{
-      commentary: event.target.value.toString(),
-      value: gradeDetailsToAdd[0].value,
-      studentId: gradeDetailsToAdd[0].studentId,
-    }];
-    setGradeDetailsToAdd(gradeDetailsToAddTemp);
-  }
-
-  function handleChangeStudentId(event: any) {
-    const gradeDetailsToAddTemp =[{
-      commentary: gradeDetailsToAdd[0].commentary,
-      value: gradeDetailsToAdd[0].value,
-      studentId: Number(event.target.value),
-    }];
-    setGradeDetailsToAdd(gradeDetailsToAddTemp);
-  }
-
-  function handleChangeGradeTypeName(event: any) {
-    setGradeTypeNameToAdd(event.target.value.toString());
-  }
-
   function handleChangeGradeTypWeight(event: any) {
     setGradeTypeWeightToAdd(Number(event.target.value));
   }
+
+  //const [gradeTypWeight, setGradeTypeWeightToAdd] = useState(0);
+  // function handleChangeValue(event: any) {
+  //   const gradeDetailsToAddTemp = [{
+  //     commentary: gradeDetailsToAdd[0].commentary,
+  //     value: Number(event.target.value),
+  //     studentId: gradeDetailsToAdd[0].studentId,
+  //   }];
+  //   setGradeDetailsToAdd(gradeDetailsToAddTemp);
+  // }
+
+  // function handleChangeCommentary(event: any) {
+  //   const gradeDetailsToAddTemp = [{
+  //     commentary: event.targets.value.toString(),
+  //     value: gradeDetailsToAdd[0].value,
+  //     studentId: gradeDetailsToAdd[0].studentId,
+  //   }];
+  //   setGradeDetailsToAdd(gradeDetailsToAddTemp);
+  // }
+
+  // function handleChangeStudentId(event: any) {
+  //   const gradeDetailsToAddTemp =[{
+  //     commentary: gradeDetailsToAdd[0].commentary,
+  //     value: gradeDetailsToAdd[0].value,
+  //     studentId: Number(event.target.value),
+  //   }];
+  //   setGradeDetailsToAdd(gradeDetailsToAddTemp);
+  // }
+
+  // function handleChangeGradeTypeName(event: any) {
+  //   setGradeTypeNameToAdd(event.target.value.toString());
+  // }
+
+  // function handleChangeGradeTypWeight(event: any) {
+  //   setGradeTypeWeightToAdd(Number(event.target.value));
+  // }
 
   function handleSubmit(event: any) {
     addGradeType(
@@ -73,10 +84,20 @@ const AddGradeTypeForm = (props: GradeInterface) => {
       <Modal.Body>
         <Form.Label style={{ fontWeight: "bold" }}>
           {" "}
-          Dodaj Rodzaj Oceny
+          Dodaj Wage
         </Form.Label>
         <Form onSubmit={handleSubmit}>
-          <div style={{ margin: "5px" }} className="form-group">
+        <div style={{ margin: "5px" }} className="form-group">
+            <Form.Control
+              type="text"
+              className="form-control"
+              id="gradeTypeName"
+              placeholder="np. 3"
+              onChange={handleChangeGradeTypWeight}
+            />
+          </div>
+
+          {/* <div style={{ margin: "5px" }} className="form-group">
             <small>Rodzaj Oceny </small>
             <Form.Control
               type="text"
@@ -95,9 +116,9 @@ const AddGradeTypeForm = (props: GradeInterface) => {
               placeholder="np. 3"
               onChange={handleChangeGradeTypWeight}
             />
-          </div>
+          </div> */}
 
-          <div style={{ margin: "5px" }} className="form-group">
+          {/* <div style={{ margin: "5px" }} className="form-group">
             <small>Ocena </small>
             <Form.Control
               type="text"
@@ -126,14 +147,14 @@ const AddGradeTypeForm = (props: GradeInterface) => {
               placeholder="np. 1111"
               onChange={handleChangeStudentId}
             />
-          </div>
+          </div> */}
 
           <button
             type="submit"
             className="btn btn-primary"
             style={{ marginTop: "10px" }}
           >
-            Submit
+            Zapisz
           </button>
         </Form>
       </Modal.Body>

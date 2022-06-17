@@ -19,6 +19,8 @@ const Subject = (): JSX.Element => {
   const [AddGradeShow, setAddGrade] = useState(false);
   const [DeleteShow, setDeleteGrade] = useState(false);
   const [UpgradeShow, setUpdateGrade] = useState(false);
+  const [AddGradeTypeShow, setAddGradeType] = useState(false);
+  const [gradeTypWeight, setGradeTypeWeight] = useState(0);
 
   const [currentClassAndSubject, setCurrentClassAndSubject] = useState({
     className: "",
@@ -45,6 +47,45 @@ const Subject = (): JSX.Element => {
       setStudentsGrades(studentsGrades);
     });
   }, [subject]);
+
+  function handleValueSubmit(event: any) {
+    setGradeTypeWeight(Number(event.target.value));
+  }
+
+  // function handleChangeValue(event: any) {
+  //   const gradeDetailsToAddTemp = [{
+  //     commentary: gradeDetailsToAdd[0].commentary,
+  //     value: Number(event.target.value),
+  //     studentId: gradeDetailsToAdd[0].studentId,
+  //   }];
+  //   setGradeDetailsToAdd(gradeDetailsToAddTemp);
+  // }
+
+  // function handleChangeCommentary(event: any) {
+  //   const gradeDetailsToAddTemp = [{
+  //     commentary: event.target.value.toString(),
+  //     value: gradeDetailsToAdd[0].value,
+  //     studentId: gradeDetailsToAdd[0].studentId,
+  //   }];
+  //   setGradeDetailsToAdd(gradeDetailsToAddTemp);
+  // }
+
+  // function handleChangeStudentId(event: any) {
+  //   const gradeDetailsToAddTemp =[{
+  //     commentary: gradeDetailsToAdd[0].commentary,
+  //     value: gradeDetailsToAdd[0].value,
+  //     studentId: Number(event.target.value),
+  //   }];
+  //   setGradeDetailsToAdd(gradeDetailsToAddTemp);
+  // }
+
+  // function handleChangeGradeTypeName(event: any) {
+  //   setGradeTypeNameToAdd(event.target.value.toString());
+  // }
+
+  // function handleChangeGradeTypWeight(event: any) {
+  //   setGradeTypeWeightToAdd(Number(event.target.value));
+  // }
 
   return (
     <>
@@ -130,9 +171,16 @@ const Subject = (): JSX.Element => {
                     );
                   })}
                   <td className="grade-cell">
-                    <input placeholder={"np. 3"} maxLength={1} style={{ width: "80px" }}></input>
-                    <input placeholder={"np. komentarz"} maxLength={1} style={{ width: "100px" }}></input>
-                    
+                    <input
+                      placeholder={"np. 3"}
+                      maxLength={1}
+                      style={{ width: "19%" }}
+                    ></input>
+                    <input
+                      placeholder={"np. ...komentarz"}
+                      maxLength={1}
+                      style={{ width: "79%", marginLeft: "5px" }}
+                    ></input>
                   </td>
                 </tr>
                 <tr></tr>
@@ -141,20 +189,34 @@ const Subject = (): JSX.Element => {
           })}
         </tbody>
         <tfoot>
-          <Button 
-            style={{ margin: "10px" }}
-            variant="primary"
-            onClick={() => setDeleteGrade(true)}
-          >
-            Dodaj wage
-          </Button>
-          <Button
-            style={{ margin: "10px" }}
-            variant="primary"
-            //  onClick={() => setDeleteGrade(true)}
-          >
-            Zapisz
-          </Button>
+          <>
+            <Button
+              style={{ margin: "10px" }}
+              variant="primary"
+              onClick={() => setAddGradeType(true)}
+            >
+              Dodaj wage
+            </Button>
+            <AddGradeTypeForm
+              show={AddGradeTypeShow}
+              onHide={() => setAddGradeType(false)}
+              //    onSubmit={handleValueSubmit}
+            />
+          </>
+          <>
+            <Button
+              style={{ margin: "10px" }}
+              variant="primary"
+              onClick={() => setAddGradeType(true)}
+            >
+              Zapisz
+            </Button>
+            <AddGradeTypeForm
+              show={AddGradeTypeShow}
+              onHide={() => setAddGradeType(false)}
+              //   onSubmit={handleValueSubmit}
+            />
+          </>
         </tfoot>
       </table>
       <span>
