@@ -18,8 +18,9 @@ export const getLoading = () => {
 const StudentNavMenu = () => {
     const {user} = useAuth();
     const {subjects, saveSubjects} = useStudent();
+    const [selected, setSelected] = useState<string>('Główna');
 
-    useEffect( () => {
+    useEffect(() => {
         const guidUser: string = user?.guid || '';
 
         getStudentSubjects(guidUser)
@@ -28,10 +29,24 @@ const StudentNavMenu = () => {
             })
     }, [])
 
+    const getLoading = () => {
+        return (
+            <div className={'loading'}>
+                <Loading/>
+            </div>
+        )
+    }
+
     const getNavItems = (): JSX.Element => {
         return (
             <>
-                <NavItem icon={<Icon.HouseFill/>} link={'/student'} title={'Główna'}/>
+                <NavItem
+                    icon={<Icon.HouseFill/>}
+                    link={'/student'}
+                    title={'Główna'}
+                    active={'Główna' === selected}
+                    onSelect={setSelected}
+                />
                 <li key={'przedmioty'} className='list-item list-item-category'>
                     <div>
                         <p id="icon"><Icon.ListUl/></p>
@@ -44,6 +59,8 @@ const StudentNavMenu = () => {
                                 icon={<Icon.JournalText/>}
                                 link={subject.link}
                                 title={subject.title}
+                                active={subject.title === selected}
+                                onSelect={setSelected}
                             />
                         ) : getLoading()}
                     </ul>

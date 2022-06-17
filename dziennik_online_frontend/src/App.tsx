@@ -70,6 +70,7 @@ const App = (): JSX.Element => {
                 >
                     <Route index element={<StudentDashboard />}/>
                     <Route path="przedmioty/:subject" element={<StudentSubject />}/>
+                    <Route path="nomatch" element={<NoMatch/>}/>
                     <Route path="*" element={<NoMatch/>}/>
                 </Route>
                 <Route path="/login" element={<Login/>}/>

@@ -16,7 +16,7 @@ const Main = (props: IMain): JSX.Element => {
                     <Col md={2} className={'side-bar'}>
                         {props.navigation}
                     </Col>
-                    <Col md={10}>
+                    <Col md={10} className={'outlet'}>
                         <Outlet />
                     </Col>
                 </Row>

@@ -30,15 +30,15 @@ export const LatestGrades = (): JSX.Element => {
             <thead>
                 <tr>
                     <th>Data</th>
-                    <th>Wartość</th>
+                    <th>Ocena</th>
                     <th>Rodzaj</th>
                     <th>Waga</th>
                     <th>Komentarz</th>
                 </tr>
             </thead>
             <tbody>
-                {latestGrades.length > 0 ? latestGrades.map(latestGrade =>
-                    <tr>
+                {latestGrades.length > 0 ? latestGrades.map((latestGrade, index) =>
+                    <tr key={index}>
                         <td>{new Date(latestGrade['date']).toLocaleString()}</td>
                         <td><strong>{latestGrade['value']}</strong></td>
                         <td>{latestGrade['gradeName']}</td>
@@ -46,7 +46,7 @@ export const LatestGrades = (): JSX.Element => {
                         <td>{latestGrade['commentary']}</td>
                     </tr>
                 )
-                : getLoading()}
+                    : <tr><td>{getLoading()}</td></tr>}
             </tbody>
         </Table>
 

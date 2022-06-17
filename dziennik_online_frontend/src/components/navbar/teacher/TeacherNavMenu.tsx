@@ -10,6 +10,7 @@ import NavMenu from "../NavMenu";
 const TeacherNavMenu = () => {
     const [subjects, setSubjects] = useState<SubjectInterface[]>();
     const {user} = useAuth();
+    const [selected, setSelected] = useState<string>('Główna');
 
     useEffect( () => {
         const guidUser: string = user?.guid || '';
@@ -39,7 +40,13 @@ const TeacherNavMenu = () => {
     const getNavItems = (): JSX.Element => {
         return (
             <>
-                <NavItem icon={<Icon.House/>} link={'/teacher'} title={'Główna'}/>
+                <NavItem
+                    icon={<Icon.HouseFill />}
+                    link={'/teacher'}
+                    title={'Główna'}
+                    active={'Główna' === selected}
+                    onSelect={setSelected}
+                />
                 <li className='list-item list-item-category'>
                     <div>
                         <p id="icon"><Icon.ListUl /></p>
@@ -51,6 +58,8 @@ const TeacherNavMenu = () => {
                                 icon={<Icon.JournalText />}
                                 link={subject.link}
                                 title={subject.title}
+                                active={subject.title === selected}
+                                onSelect={setSelected}
                             />
                         )
                         : getLoading()}
