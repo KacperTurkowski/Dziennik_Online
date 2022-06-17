@@ -2,11 +2,11 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import useAuth from "../../../../context/AuthContext/useAuth";
 import { getStudentsGrades } from "../../../../services/teacherSubjects";
-import { Button } from "react-bootstrap";
-import DeleteForm from "../DEleteGrade";
-import { fff, StudentsGrades } from "../../helper";
+import { Badge, Button } from "react-bootstrap";
+import AddForm from "../AddGrade";
+import { StudentsGrades } from "../../helper";
 import AddGradeTypeForm from "../AggGradeType";
-import UpgradeGrade from "../UpdateGrade";
+import { Grade } from "../Grade";
 import ButtonModal from "../../statistics/ButtonModal";
 import GradeButtonModal from "../../statistics/GradeButtonModal";
 import * as Icon from "react-bootstrap-icons";
@@ -26,7 +26,12 @@ const Subject = (): JSX.Element => {
     className: "",
     schoolSubjectName: "",
   });
+  const [studentsGrades, setStudentsGrades] = useState<StudentsGrades | null>();
+
   useEffect(() => {
+    setStudentsGrades(null);
+    setCurrentClassAndSubject({className: '', schoolSubjectName: ''});
+
     getStudentsGrades(userGuid, subjectId).then((classAndSubjectData) => {
       const currentClassAndSubject = () => {
         return {
@@ -35,16 +40,7 @@ const Subject = (): JSX.Element => {
         };
       };
       setCurrentClassAndSubject(currentClassAndSubject);
-    });
-  }, [subject]);
-
-  const [studentsGrades, setStudentsGrades] = useState<StudentsGrades>();
-  useEffect(() => {
-    getStudentsGrades(userGuid, subjectId).then((gradesData) => {
-      const studentsGrades = () => {
-        return gradesData;
-      };
-      setStudentsGrades(studentsGrades);
+      setStudentsGrades(classAndSubjectData);
     });
   }, [subject]);
 
@@ -115,7 +111,6 @@ const Subject = (): JSX.Element => {
           </span>{" "}
         </span>
       </div>
-      {/* {getLoading()} */}
       <table className="table table-bordered">
         <thead>
           <tr>
@@ -155,7 +150,7 @@ const Subject = (): JSX.Element => {
                           <div className="grade-cell">
                             <div>
                               {userGrade.map((grade) => (
-                                <span className="grade">{grade.value}</span>
+                                  <Grade grade={grade} gradeTypeId={item.gradeTypeId} />
                               ))}
                             </div>
                             {userGrade.length === 0 && (
@@ -219,26 +214,6 @@ const Subject = (): JSX.Element => {
           </>
         </tfoot>
       </table>
-      <span>
-        <Button
-          style={{ margin: "10px" }}
-          variant="primary"
-          //  onClick={() => setDeleteGrade(true)}
-        >
-          Usun Ocene
-        </Button>
-        <DeleteForm show={DeleteShow} onHide={() => setDeleteGrade(false)} />
-      </span>
-      <span>
-        <Button
-          style={{ margin: "10px" }}
-          variant="primary"
-          onClick={() => setUpdateGrade(true)}
-        >
-          Zaktualizuj Ocene
-        </Button>
-        <UpgradeGrade show={UpgradeShow} onHide={() => setUpdateGrade(false)} />
-      </span>
       {/* <span>
         <Button
           style={{ margin: "10px" }}

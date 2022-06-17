@@ -1,7 +1,6 @@
 import axios from "axios";
 import { API_URL } from "../config/API_URL";
 
-import { getStatisticsForGradeTypeId, getTeacherSubject } from "../mocks/mocks";
 
 export const getTeacherSubjects = async (uuid: string) => {
   try {
@@ -46,6 +45,16 @@ export const getStudentsGrades = async (
     throw e;
   }
 };
+
+export const getGradeInformation = async(userGuid: string, subjectId: number, gradeTypeId: number, gradeId: number) => {
+    try {
+        const response = await axios.post(`${API_URL}/teacher/grades/GetGrade`, {
+
+        })
+    } catch (e) {
+        throw e;
+    }
+}
 
 //////////////////////////
 
@@ -157,28 +166,23 @@ export const updateGradeType = async (
   }
 };
 
-export const deleteGrade = async (
-  userGuid: string,
-  subjectId: number,
-  gradeTypeId: number,
-  gradeId: number
-) => {
-  try {
-    const response = await axios.delete(
-      `${API_URL}/teacher/grades/DeleteGrade`,
-      {
-        data: {
-          userGuid,
-          subjectId,
-          gradeTypeId,
-          gradeId,
-        },
-      }
-    );
-    return response.data;
-  } catch (e) {
-    throw e;
-  }
+export const deleteGrade = async (userGuid: string, subjectId: number, gradeTypeId: number, gradeId: number) => {
+    try {
+        const response = await axios.delete(
+            `${API_URL}/teacher/grades/DeleteGrade`,
+            {
+                data: {
+                    userGuid,
+                    subjectId,
+                    gradeTypeId,
+                    gradeId,
+                },
+            }
+        );
+        return response.data;
+    } catch (e) {
+        throw e;
+    }
 };
 
 export const deleteGradeType = async (
