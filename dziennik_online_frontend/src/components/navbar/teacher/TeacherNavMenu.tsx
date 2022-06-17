@@ -39,7 +39,7 @@ const TeacherNavMenu = () => {
     const getNavItems = (): JSX.Element => {
         return (
             <>
-                <NavItem icon={<Icon.HouseFill />} link={'/teacher'} title={'Główna'}/>
+                <NavItem icon={<Icon.House/>} link={'/teacher'} title={'Główna'}/>
                 <li className='list-item list-item-category'>
                     <div>
                         <p id="icon"><Icon.ListUl /></p>

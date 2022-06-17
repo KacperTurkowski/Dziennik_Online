@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Button } from "react-bootstrap";
 import ModalWithStatistics from "./ModalWithStatistics";
+import * as Icon from "react-bootstrap-icons";
 
 interface IButtonModalProps {
   gradeTypeId: number;
@@ -17,7 +18,7 @@ const ButtonModal = (props: IButtonModalProps) => {
         variant="primary"
         onClick={() => setModalShow(true)}
       >
-        S
+       {<Icon.BarChartFill/>}
       </Button>
       <ModalWithStatistics
         gradeTypeName={gradeTypeName}
