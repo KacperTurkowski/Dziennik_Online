@@ -138,7 +138,7 @@ const Subject = (): JSX.Element => {
           <Button
             style={{ margin: "10px" }}
             variant="primary"
-            onClick={() => setDeleteGrade(true)}
+            // onClick={() => setDeleteGrade(true)}
           >
             Dodaj wage
           </Button>

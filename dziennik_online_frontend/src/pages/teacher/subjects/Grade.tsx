@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { Badge, OverlayTrigger, Popover, Toast } from "react-bootstrap";
-import {Grade as GradeInterface} from '../helper';
+import { OverlayTrigger, Popover } from "react-bootstrap";
+import { Grade as GradeInterface } from '../helper';
 import DeleteGrade from "./DeleteGrade";
 import UpgradeGrade from "./UpdateGrade";
 
@@ -15,12 +15,12 @@ export const Grade = ({grade, gradeTypeId}: IGrade): JSX.Element => {
 
     const handleLeftClick = (event: any): void => {
         event.preventDefault();
-        if (event.detail === 2) {
+        if ( event.detail === 2 ) {
             setUpdateGrade(true);
         }
     }
 
-    const handleRightClick = (event: any): void  => {
+    const handleRightClick = (event: any): void => {
         event.preventDefault();
         setDeleteGrade(true);
     }
@@ -31,8 +31,8 @@ export const Grade = ({grade, gradeTypeId}: IGrade): JSX.Element => {
                 <Popover.Body>
                     {grade.commentary ?
                         <>
-                            <p>Dodany komentarz: <br />
-                            <strong>{grade.commentary}</strong></p>
+                            <p>Dodany komentarz: <br/>
+                                <strong>{grade.commentary}</strong></p>
                         </>
                         : <p>Brak komentarza</p>
                     }
@@ -49,14 +49,13 @@ export const Grade = ({grade, gradeTypeId}: IGrade): JSX.Element => {
                 placement={'left'}
                 key={grade.id}
             >
-                <Badge
+                <span
                     style={{cursor: "pointer"}}
-                    bg={'primary'}
                     onClick={handleLeftClick}
                     onContextMenu={handleRightClick}
                 >
-                        {grade.value}
-                </Badge>
+                    <strong>{grade.value}</strong>
+                </span>
             </OverlayTrigger>
 
             <UpgradeGrade
