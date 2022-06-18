@@ -42,7 +42,6 @@ const AddForm = (props: GradeInterfaceProps) => {
         gradeTypeId
       );
       navigate(0);
-      onHide;
     } catch (e) {
       console.log(e);
     } finally {
