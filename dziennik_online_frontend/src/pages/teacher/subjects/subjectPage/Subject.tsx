@@ -1,3 +1,4 @@
+// @ts-ignore
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import useAuth from "../../../../context/AuthContext/useAuth";
@@ -29,7 +30,7 @@ const Subject = (): JSX.Element => {
   });
   const [studentsGrades, setStudentsGrades] = useState<StudentsGrades | null>();
 
-  const [gradeDetailsToAdd, setGradeDetailsToAdd] = useState([]);
+  const [gradeDetailsToAdd, setGradeDetailsToAdd] = useState<any[]>([]);
 
   useEffect(() => {
     setStudentsGrades(null);
@@ -74,8 +75,7 @@ const Subject = (): JSX.Element => {
   };
 
   function handleChangeValue(userId: number) {
-    return (event) => {
-      console.log(userId);
+    return (event: any) => {
       const stateCopy = JSON.parse(JSON.stringify(gradeDetailsToAdd));
       const studentObject = stateCopy.find(
         (el: any) => el.studentId === userId
@@ -102,8 +102,7 @@ const Subject = (): JSX.Element => {
   }
 
   function handleChangeCommentaryValue(userId: number) {
-    return (event) => {
-      console.log(userId);
+    return (event: any) => {
       const stateCopy = JSON.parse(JSON.stringify(gradeDetailsToAdd));
       const studentObject = stateCopy.find(
         (el: any) => el.studentId === userId
