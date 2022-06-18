@@ -1,6 +1,6 @@
 import React, { MouseEventHandler, useState } from "react";
 import { Button, Modal, Form } from "react-bootstrap";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import useAuth from "../../../context/AuthContext/useAuth";
 import { addGrade } from "../../../services/teacherSubjects";
 
@@ -12,6 +12,7 @@ export interface GradeInterfaceProps {
 }
 
 const AddForm = (props: GradeInterfaceProps) => {
+  const [loading, setLoading] = useState<boolean>(false);
   const { onHide, show, userId, gradeTypeId } = props;
   const { subject } = useParams();
   const { user } = useAuth();
@@ -19,6 +20,7 @@ const AddForm = (props: GradeInterfaceProps) => {
   const currentSubjectId: number = Number(subject);
   const [commentaryToAdd, setCommentaryToAdd] = useState("");
   const [valueToAdd, setValueToAdd] = useState(0);
+  const navigate = useNavigate();
 
   function handleChangeCommentary(event: any) {
     setCommentaryToAdd(event.target.value.toString());
@@ -27,17 +29,26 @@ const AddForm = (props: GradeInterfaceProps) => {
   function handleChangeValue(event: any) {
     setValueToAdd(Number(event.target.value));
   }
-  function handleSubmit(event: any) {
-    addGrade(
-      currentUserGuid,
-      currentSubjectId,
-      commentaryToAdd,
-      valueToAdd,
-      userId,
-      gradeTypeId
-    );
+
+  const handleSubmit = async (event: any): Promise<void> => {
     event.preventDefault();
-  }
+    try {
+      await addGrade(
+        currentUserGuid,
+        currentSubjectId,
+        commentaryToAdd,
+        valueToAdd,
+        userId,
+        gradeTypeId
+      );
+      navigate(0);
+      onHide;
+    } catch (e) {
+      console.log(e);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <Modal size="xl" centered={true} show={show}>

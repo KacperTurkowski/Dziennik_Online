@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import useAuth from "../../../../context/AuthContext/useAuth";
 import {
   addGradeType,
   getStudentsGrades,
 } from "../../../../services/teacherSubjects";
-import {  Button } from "react-bootstrap";
+import { Button } from "react-bootstrap";
 import { StudentsGrades } from "../../helper";
 // import AddGradeTypeForm from "../AggGradeType";
 import { Grade } from "../Grade";
@@ -14,12 +14,14 @@ import GradeButtonModal from "../../statistics/GradeButtonModal";
 import * as Icon from "react-bootstrap-icons";
 
 const Subject = (): JSX.Element => {
+  const [loading, setLoading] = useState<boolean>(false);
   const { subject } = useParams();
   const { user } = useAuth();
   const userGuid: string = user?.guid ?? "";
   const subjectId: number = Number(subject);
   const [gradeTypeName, setGradeTypeNameToAdd] = useState("");
   const [gradeTypWeight, setGradeTypeWeightToAdd] = useState(0);
+  const navigate = useNavigate();
 
   const [currentClassAndSubject, setCurrentClassAndSubject] = useState({
     className: "",
@@ -53,17 +55,23 @@ const Subject = (): JSX.Element => {
     setGradeTypeNameToAdd(event.target.value);
   }
 
-  function handleValueSubmit(event: any) {
-    console.log("wlazlo");
-    addGradeType(
-      gradeTypeName,
-      gradeTypWeight,
-      userGuid,
-      subjectId,
-      gradeDetailsToAdd
-    );
+  const handleValueSubmit = async (event: any): Promise<void> => {
     event.preventDefault();
-  }
+    try {
+      await addGradeType(
+        gradeTypeName,
+        gradeTypWeight,
+        userGuid,
+        subjectId,
+        gradeDetailsToAdd
+      );
+      navigate(0);
+    } catch (e) {
+      console.log(e);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   function handleChangeValue(userId: number) {
     return (event) => {
