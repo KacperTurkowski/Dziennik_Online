@@ -20,6 +20,7 @@ const AddForm = (props: GradeInterfaceProps) => {
   const currentSubjectId: number = Number(subject);
   const [commentaryToAdd, setCommentaryToAdd] = useState("");
   const [valueToAdd, setValueToAdd] = useState(0);
+  const [disabled, setDisabled] = useState(true);
   const navigate = useNavigate();
 
   function handleChangeCommentary(event: any) {
@@ -28,6 +29,12 @@ const AddForm = (props: GradeInterfaceProps) => {
 
   function handleChangeValue(event: any) {
     setValueToAdd(Number(event.target.value));
+    if ([1,2,3,4,5,6].includes(Number(event.target.value))) {
+      setDisabled(false);
+    }
+    else {
+      setDisabled(true);
+    }
   }
 
   const handleSubmit = async (event: any): Promise<void> => {
@@ -57,10 +64,12 @@ const AddForm = (props: GradeInterfaceProps) => {
           <div style={{ margin: "5px" }} className="form-group">
             <small>Ocena </small>
             <Form.Control
-              type="text"
+              type="number"
+              min={1}
+              max={6}
               className="form-control"
               id="value"
-              placeholder="np. 0"
+              placeholder="np. 5"
               onChange={handleChangeValue}
             />
           </div>
@@ -78,6 +87,7 @@ const AddForm = (props: GradeInterfaceProps) => {
             type="submit"
             className="btn btn-primary"
             style={{ marginTop: "10px" }}
+            disabled={disabled}
           >
             Zapisz
           </button>

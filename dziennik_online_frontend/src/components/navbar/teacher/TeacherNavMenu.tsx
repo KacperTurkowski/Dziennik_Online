@@ -60,6 +60,7 @@ const TeacherNavMenu = () => {
                                 title={subject.title}
                                 active={subject.title === selected}
                                 onSelect={setSelected}
+                                key={subject.id}
                             />
                         )
                         : getLoading()}

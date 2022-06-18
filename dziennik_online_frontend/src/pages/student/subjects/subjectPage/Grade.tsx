@@ -5,7 +5,11 @@ interface IGrade {
 }
 
 export const Grade = ({grade}: IGrade): JSX.Element => {
-    const gradeColor = Number(grade['value']) > 1 ? 'primary' : 'warning';
+    function getGradeColor(value: number) {
+        if(value === 1) return 'danger';
+        if(value === 6) return 'success';
+        else return "primary";
+    }
 
     const getGradePopover = (): JSX.Element => {
         return (
@@ -36,7 +40,7 @@ export const Grade = ({grade}: IGrade): JSX.Element => {
                 placement={'left'}
                 overlay={getGradePopover()}
             >
-                <Badge bg={gradeColor}>{grade['value']}</Badge>
+                <Badge bg={getGradeColor(Number(grade['value']))}>{grade['value']}</Badge>
             </OverlayTrigger>
         </>
     )

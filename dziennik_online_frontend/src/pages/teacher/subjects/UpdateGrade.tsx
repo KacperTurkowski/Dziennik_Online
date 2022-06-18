@@ -14,6 +14,7 @@ const UpgradeGrade = ({grade, gradeTypeId, onHide, show}: UpdateGradeInterface) 
     const [loading, setLoading] = useState<boolean>(false);
     const [commentaryToUpdate, setCommentaryToUpdate] = useState(grade.commentary);
     const [valueToUpdate, setValueToUpdate] = useState(grade.value);
+    const [disabled, setDisabled] = useState(true);
 
     function handleChangeCommentary(event: any) {
         setCommentaryToUpdate(event.target.value.toString());
@@ -21,6 +22,12 @@ const UpgradeGrade = ({grade, gradeTypeId, onHide, show}: UpdateGradeInterface) 
 
     function handleChangeValue(event: any) {
         setValueToUpdate(Number(event.target.value));
+        if ([1,2,3,4,5,6].includes(Number(event.target.value))) {
+            setDisabled(false);
+        }
+        else {
+            setDisabled(true);
+        }
     }
 
     async function handleSubmit(event: any) {
@@ -56,9 +63,11 @@ const UpgradeGrade = ({grade, gradeTypeId, onHide, show}: UpdateGradeInterface) 
                         <small>Ocena </small>
                         <Form.Control
                             type="number"
+                            min={1}
+                            max={6}
                             className="form-control"
                             id="value"
-                            value={valueToUpdate}
+                            placeholder={valueToUpdate.toString()}
                             onChange={handleChangeValue}
                         />
                     </div>
@@ -79,7 +88,11 @@ const UpgradeGrade = ({grade, gradeTypeId, onHide, show}: UpdateGradeInterface) 
 
             </Modal.Body>
             <Modal.Footer>
-                <button onClick={handleSubmit} className="btn btn-primary">
+                <button
+                    onClick={handleSubmit}
+                    className="btn btn-primary"
+                    disabled={disabled}
+                >
                     Zaktualizuj
                 </button>
                 <Button onClick={onHide}>Anuluj</Button>
