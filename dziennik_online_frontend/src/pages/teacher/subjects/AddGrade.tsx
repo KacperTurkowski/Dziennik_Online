@@ -3,14 +3,12 @@ import { Button, Modal, Form } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import useAuth from "../../../context/AuthContext/useAuth";
 import { addGrade } from "../../../services/teacherSubjects";
-import { GradeInterface } from "../helper";
-//import { Form } from 'semantic-ui-react'
 
 export interface GradeInterfaceProps {
   onHide: MouseEventHandler;
   show: boolean;
-  gradeTypeId: number,
-  userId: number,
+  gradeTypeId: number;
+  userId: number;
 }
 
 const AddForm = (props: GradeInterfaceProps) => {
@@ -36,7 +34,7 @@ const AddForm = (props: GradeInterfaceProps) => {
       commentaryToAdd,
       valueToAdd,
       userId,
-      gradeTypeId,
+      gradeTypeId
     );
     event.preventDefault();
   }

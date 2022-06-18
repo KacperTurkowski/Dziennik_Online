@@ -115,7 +115,7 @@ export const addGradeType = async (
     commentary: string;
     value: number;
     studentId: number;
-  }
+  }[]
 ) => {
   try {
     const response = await axios.post(

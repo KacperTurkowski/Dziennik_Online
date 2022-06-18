@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import useAuth from "../../../../context/AuthContext/useAuth";
-import { getStudentsGrades } from "../../../../services/teacherSubjects";
-import { Badge, Button } from "react-bootstrap";
-import AddForm from "../AddGrade";
+import {
+  addGradeType,
+  getStudentsGrades,
+} from "../../../../services/teacherSubjects";
+import {  Button } from "react-bootstrap";
 import { StudentsGrades } from "../../helper";
-import AddGradeTypeForm from "../AggGradeType";
+// import AddGradeTypeForm from "../AggGradeType";
 import { Grade } from "../Grade";
 import ButtonModal from "../../statistics/ButtonModal";
 import GradeButtonModal from "../../statistics/GradeButtonModal";
@@ -16,11 +18,8 @@ const Subject = (): JSX.Element => {
   const { user } = useAuth();
   const userGuid: string = user?.guid ?? "";
   const subjectId: number = Number(subject);
-  const [AddGradeShow, setAddGrade] = useState(false);
-  const [DeleteShow, setDeleteGrade] = useState(false);
-  const [UpgradeShow, setUpdateGrade] = useState(false);
-  const [AddGradeTypeShow, setAddGradeType] = useState(false);
-  const [gradeTypWeight, setGradeTypeWeight] = useState(0);
+  const [gradeTypeName, setGradeTypeNameToAdd] = useState("");
+  const [gradeTypWeight, setGradeTypeWeightToAdd] = useState(0);
 
   const [currentClassAndSubject, setCurrentClassAndSubject] = useState({
     className: "",
@@ -28,9 +27,11 @@ const Subject = (): JSX.Element => {
   });
   const [studentsGrades, setStudentsGrades] = useState<StudentsGrades | null>();
 
+  const [gradeDetailsToAdd, setGradeDetailsToAdd] = useState([]);
+
   useEffect(() => {
     setStudentsGrades(null);
-    setCurrentClassAndSubject({className: '', schoolSubjectName: ''});
+    setCurrentClassAndSubject({ className: "", schoolSubjectName: "" });
 
     getStudentsGrades(userGuid, subjectId).then((classAndSubjectData) => {
       const currentClassAndSubject = () => {
@@ -44,45 +45,83 @@ const Subject = (): JSX.Element => {
     });
   }, [subject]);
 
-  function handleValueSubmit(event: any) {
-    setGradeTypeWeight(Number(event.target.value));
+  function handleValueWeighChange(event: any) {
+    setGradeTypeWeightToAdd(event.target.value);
   }
 
-  // function handleChangeValue(event: any) {
-  //   const gradeDetailsToAddTemp = [{
-  //     commentary: gradeDetailsToAdd[0].commentary,
-  //     value: Number(event.target.value),
-  //     studentId: gradeDetailsToAdd[0].studentId,
-  //   }];
-  //   setGradeDetailsToAdd(gradeDetailsToAddTemp);
-  // }
+  function handleTypeNameChange(event: any) {
+    setGradeTypeNameToAdd(event.target.value);
+  }
 
-  // function handleChangeCommentary(event: any) {
-  //   const gradeDetailsToAddTemp = [{
-  //     commentary: event.target.value.toString(),
-  //     value: gradeDetailsToAdd[0].value,
-  //     studentId: gradeDetailsToAdd[0].studentId,
-  //   }];
-  //   setGradeDetailsToAdd(gradeDetailsToAddTemp);
-  // }
+  function handleValueSubmit(event: any) {
+    console.log("wlazlo");
+    addGradeType(
+      gradeTypeName,
+      gradeTypWeight,
+      userGuid,
+      subjectId,
+      gradeDetailsToAdd
+    );
+    event.preventDefault();
+  }
 
-  // function handleChangeStudentId(event: any) {
-  //   const gradeDetailsToAddTemp =[{
-  //     commentary: gradeDetailsToAdd[0].commentary,
-  //     value: gradeDetailsToAdd[0].value,
-  //     studentId: Number(event.target.value),
-  //   }];
-  //   setGradeDetailsToAdd(gradeDetailsToAddTemp);
-  // }
+  function handleChangeValue(userId: number) {
+    return (event) => {
+      console.log(userId);
+      const stateCopy = JSON.parse(JSON.stringify(gradeDetailsToAdd));
+      const studentObject = stateCopy.find(
+        (el: any) => el.studentId === userId
+      );
+      const studentObjectIndex = stateCopy.findIndex(
+        (el: any) => el.studentId === userId
+      );
+      if (studentObjectIndex > -1) {
+        stateCopy.splice(studentObjectIndex, 1);
+      }
+      if (studentObject) {
+        studentObject.value = Number(event.target.value); //  studentObject.commentary
+        setGradeDetailsToAdd([...stateCopy, studentObject]);
+      }
+      if (typeof studentObject === "undefined") {
+        const objectToPush = {
+          commentary: "",
+          value: +event.target.value,
+          studentId: userId,
+        };
+        setGradeDetailsToAdd([...stateCopy, objectToPush]);
+      }
+    };
+  }
 
-  // function handleChangeGradeTypeName(event: any) {
-  //   setGradeTypeNameToAdd(event.target.value.toString());
-  // }
+  function handleChangeCommentaryValue(userId: number) {
+    return (event) => {
+      console.log(userId);
+      const stateCopy = JSON.parse(JSON.stringify(gradeDetailsToAdd));
+      const studentObject = stateCopy.find(
+        (el: any) => el.studentId === userId
+      );
+      const studentObjectIndex = stateCopy.findIndex(
+        (el: any) => el.studentId === userId
+      );
+      if (studentObjectIndex > -1) {
+        stateCopy.splice(studentObjectIndex, 1);
+      }
+      if (studentObject) {
+        studentObject.commentary = event.target.value; //  studentObject.commentary
+        setGradeDetailsToAdd([...stateCopy, studentObject]);
+      }
+      if (typeof studentObject === "undefined") {
+        const objectToPush = {
+          commentary: event.target.value,
+          value: undefined,
+          studentId: userId,
+        };
+        setGradeDetailsToAdd([...stateCopy, objectToPush]);
+      }
+    };
+  }
 
-  // function handleChangeGradeTypWeight(event: any) {
-  //   setGradeTypeWeightToAdd(Number(event.target.value));
-  // }
-
+  console.log("gradeDetailsToAdd: ", gradeDetailsToAdd);
   return (
     <>
       <div
@@ -111,7 +150,10 @@ const Subject = (): JSX.Element => {
           </span>{" "}
         </span>
       </div>
-      <table className="table table-bordered">
+      <table
+        className="table table-bordered"
+        style={{ boxShadow: "5px 10px 10px -2px rgba(66, 68, 90, 1)" }}
+      >
         <thead>
           <tr>
             <th>Imie i Nazwisko</th>
@@ -127,8 +169,13 @@ const Subject = (): JSX.Element => {
                 </div>
               </th>
             ))}
-            <th>
-              <input style={{ width: "100%" }} placeholder="Nowy Typ Oceny" />
+            <th style={{ maxWidth: "300px" }}>
+              <input
+                style={{ width: "100%" }}
+                placeholder="Nowy Typ Oceny"
+                value={gradeTypeName}
+                onChange={handleTypeNameChange}
+              />
             </th>
           </tr>
         </thead>
@@ -136,7 +183,7 @@ const Subject = (): JSX.Element => {
           {studentsGrades?.students.map((student) => {
             return (
               <>
-                <tr key={student.id}>
+                <tr className={student.id.toString()} key={student.id}>
                   <td>
                     {student.name} {student.surname}
                   </td>
@@ -150,7 +197,10 @@ const Subject = (): JSX.Element => {
                           <div className="grade-cell">
                             <div>
                               {userGrade.map((grade) => (
-                                  <Grade grade={grade} gradeTypeId={item.gradeTypeId} />
+                                <Grade
+                                  grade={grade}
+                                  gradeTypeId={item.gradeTypeId}
+                                />
                               ))}
                             </div>
                             {userGrade.length === 0 && (
@@ -170,11 +220,12 @@ const Subject = (): JSX.Element => {
                       placeholder={"np. 3"}
                       maxLength={1}
                       style={{ width: "19%" }}
+                      onChange={handleChangeValue(student.id)}
                     ></input>
                     <input
                       placeholder={"np. ...komentarz"}
-                      maxLength={1}
                       style={{ width: "79%", marginLeft: "5px" }}
+                      onChange={handleChangeCommentaryValue(student.id)}
                     ></input>
                   </td>
                 </tr>
@@ -184,49 +235,27 @@ const Subject = (): JSX.Element => {
           })}
         </tbody>
         <tfoot>
-          <>
-            <Button
-              style={{ margin: "10px" }}
-              variant="primary"
-              onClick={() => setAddGradeType(true)}
-            >
-              Dodaj wage
-            </Button>
-            <AddGradeTypeForm
-              show={AddGradeTypeShow}
-              onHide={() => setAddGradeType(false)}
-              //    onSubmit={handleValueSubmit}
-            />
-          </>
-          <>
-            <Button
-              style={{ margin: "10px" }}
-              variant="primary"
-              onClick={() => setAddGradeType(true)}
-            >
-              Zapisz
-            </Button>
-            <AddGradeTypeForm
-              show={AddGradeTypeShow}
-              onHide={() => setAddGradeType(false)}
-              //   onSubmit={handleValueSubmit}
-            />
-          </>
+          <tr></tr>
         </tfoot>
       </table>
-      {/* <span>
-        <Button
-          style={{ margin: "10px" }}
-          variant="primary"
-          onClick={() => setAddGradeType(true)}
-        >
-          Dodaj Typ Oceny
-        </Button>
-        <AddGradeTypeForm
-          show={AddGradeTypeShow}
-          onHide={() => setAddGradeType(false)}
-        />
-      </span> */}
+      <div style={{ float: "right", marginRight: "30px" }}>
+        <>
+          <input
+            style={{ margin: "10px", height: "37px" }}
+            onChange={handleValueWeighChange}
+            value={gradeTypWeight}
+          />
+        </>
+        <>
+          <Button
+            style={{ margin: "10px" }}
+            variant="primary"
+            onClick={handleValueSubmit}
+          >
+            Zapisz
+          </Button>
+        </>
+      </div>
     </>
   );
 };
