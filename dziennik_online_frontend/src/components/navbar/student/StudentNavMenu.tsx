@@ -7,6 +7,14 @@ import Loading from "../../loading/Loading";
 import NavItem from "../NavItem";
 import NavMenu from "../NavMenu";
 
+export const getLoading = () => {
+    return (
+        <div className={'loading'}>
+            <Loading />
+        </div>
+    )
+}
+
 const StudentNavMenu = () => {
     const {user} = useAuth();
     const {subjects, saveSubjects} = useStudent();
