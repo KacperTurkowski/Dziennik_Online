@@ -1,21 +1,19 @@
 // @ts-ignore
 import React, { useEffect, useState } from "react";
+import { Button } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
 import useAuth from "../../../../context/AuthContext/useAuth";
-import {
-  addGradeType,
-  getStudentsGrades,
-} from "../../../../services/teacherSubjects";
-import {Button} from "react-bootstrap";
+import { addGradeType, getStudentsGrades, } from "../../../../services/teacherSubjects";
 import { StudentsGrades } from "../../helper";
-// import AddGradeTypeForm from "../AggGradeType";
-import { Grade } from "../Grade";
 import ButtonModal from "../../statistics/ButtonModal";
 import GradeButtonModal from "../../statistics/GradeButtonModal";
-import * as Icon from "react-bootstrap-icons";
+// import AddGradeTypeForm from "../AggGradeType";
+import { Grade } from "../Grade";
 
 const Subject = (): JSX.Element => {
   const [loading, setLoading] = useState<boolean>(false);
+  const [fetchGradesAgain, setFetchGradesAgain] = useState<boolean>(false);
+
   const { subject } = useParams();
   const { user } = useAuth();
   const userGuid: string = user?.guid ?? "";
@@ -51,7 +49,7 @@ const Subject = (): JSX.Element => {
       setCurrentClassAndSubject(currentClassAndSubject);
       setStudentsGrades(classAndSubjectData);
     });
-  }, [subject]);
+  }, [subject, fetchGradesAgain]);
 
   function handleValueWeighChange(event: any) {
     setGradeTypeWeightToAdd(event.target.value);
@@ -222,6 +220,7 @@ const Subject = (): JSX.Element => {
                                     grade={grade}
                                     gradeTypeId={item.gradeTypeId}
                                     checked={checked}
+                                    fetchedAgain={() => setFetchGradesAgain(!fetchGradesAgain)}
                                 />
                               ))}
                             </div>
@@ -230,6 +229,7 @@ const Subject = (): JSX.Element => {
                                 userId={student.id}
                                 userGuid={userGuid}
                                 gradeTypeId={item.gradeTypeId}
+                                fetchedAgain={() => setFetchGradesAgain(!fetchGradesAgain)}
                               />
                             )}
                           </div>
@@ -246,21 +246,21 @@ const Subject = (): JSX.Element => {
                         maxLength={1}
                         style={{ width: "19%" }}
                         onChange={handleChangeValue(student.id)}
-                    ></input>
+                    />
                     <input
                       placeholder={"np. ...komentarz"}
                       style={{ width: "79%", marginLeft: "5px" }}
                       onChange={handleChangeCommentaryValue(student.id)}
-                    ></input>
+                    />
                   </td>
                 </tr>
-                <tr></tr>
+                <tr/>
               </>
             );
           })}
         </tbody>
         <tfoot>
-          <tr></tr>
+          <tr />
         </tfoot>
       </table>
       <div style={{ float: "right", marginRight: "30px" }}>
@@ -270,19 +270,19 @@ const Subject = (): JSX.Element => {
         <>
           <input
               type={'number'}
-            style={{ margin: "10px", height: "37px" }}
-            onChange={handleValueWeighChange}
-            value={gradeTypWeight}
+              style={{ margin: "10px", height: "37px" }}
+              onChange={handleValueWeighChange}
+              value={gradeTypWeight}
           />
         </>
         <>
-          <Button
-            style={{ margin: "10px" }}
-            variant="primary"
-            onClick={handleValueSubmit}
-          >
-            Zapisz
-          </Button>
+            <Button
+                style={{margin: "10px"}}
+                variant="primary"
+                onClick={handleValueSubmit}
+            >
+                Zapisz
+            </Button>
         </>
       </div>
     </>

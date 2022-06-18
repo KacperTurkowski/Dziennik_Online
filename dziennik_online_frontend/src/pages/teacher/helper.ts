@@ -46,6 +46,7 @@ export interface GradeInterface {
 
 export interface UpdateGradeInterface {
   onHide: MouseEventHandler;
+  handleSuccess: () => void;
   show: boolean;
   grade: Grade,
   gradeTypeId: number,
@@ -53,6 +54,7 @@ export interface UpdateGradeInterface {
 
 export interface DeleteGradeInterface {
   handleHide: () => void;
+  handleSuccess: () => void;
   show: boolean;
   gradeId: number,
   gradeTypeId: number,
