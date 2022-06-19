@@ -8,7 +8,7 @@ import { DeleteGradeInterface } from "../helper";
 
 const DeleteGrade = (props: DeleteGradeInterface) => {
     const [loading, setLoading] = useState<boolean>(false);
-    const {handleHide, show, gradeId, gradeTypeId} = props;
+    const {handleHide, show, gradeId, gradeTypeId, handleSuccess} = props;
     const {user} = useAuth();
     const {subject} = useParams();
     const navigate = useNavigate()
@@ -21,7 +21,7 @@ const DeleteGrade = (props: DeleteGradeInterface) => {
 
         try {
             await deleteGrade(userGuid, subjectId, gradeTypeId, gradeId);
-            navigate(0)
+            handleSuccess();
             handleHide();
         } catch (e) {
             console.log(e)

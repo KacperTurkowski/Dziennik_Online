@@ -1,15 +1,18 @@
 import React, { useState } from "react";
-import { OverlayTrigger, Popover } from "react-bootstrap";
+import { Badge, OverlayTrigger, Popover } from "react-bootstrap";
+import { Variant } from "react-bootstrap/types";
 import { Grade as GradeInterface } from '../helper';
 import DeleteGrade from "./DeleteGrade";
 import UpgradeGrade from "./UpdateGrade";
 
 interface IGrade {
     grade: GradeInterface;
-    gradeTypeId: number
+    gradeTypeId: number,
+    checked: boolean
+    fetchedAgain: () => void;
 }
 
-export const Grade = ({grade, gradeTypeId}: IGrade): JSX.Element => {
+export const Grade = ({grade, gradeTypeId, checked, fetchedAgain}: IGrade): JSX.Element => {
     const [DeleteShow, setDeleteGrade] = useState(false);
     const [UpgradeShow, setUpdateGrade] = useState(false);
 
@@ -23,6 +26,21 @@ export const Grade = ({grade, gradeTypeId}: IGrade): JSX.Element => {
     const handleRightClick = (event: any): void => {
         event.preventDefault();
         setDeleteGrade(true);
+    }
+
+    function getGradeColor(value: number): Variant {
+        if ( checked ) {
+            switch (value) {
+                case 1:
+                    return 'danger'
+                case 6:
+                    return 'success'
+                default:
+                    return 'primary'
+            }
+        }
+
+        return 'primary';
     }
 
     const renderTooltip = (): JSX.Element => {
@@ -54,19 +72,21 @@ export const Grade = ({grade, gradeTypeId}: IGrade): JSX.Element => {
                     onClick={handleLeftClick}
                     onContextMenu={handleRightClick}
                 >
-                    <strong>{grade.value}</strong>
+                    <Badge bg={getGradeColor(grade.value)}>{grade.value}</Badge>
                 </span>
             </OverlayTrigger>
 
             <UpgradeGrade
                 show={UpgradeShow}
                 onHide={() => setUpdateGrade(false)}
+                handleSuccess={() => fetchedAgain()}
                 grade={grade}
                 gradeTypeId={gradeTypeId}
             />
             <DeleteGrade
                 show={DeleteShow}
                 handleHide={() => setDeleteGrade(false)}
+                handleSuccess={() => fetchedAgain()}
                 gradeTypeId={gradeTypeId}
                 gradeId={grade.id}
             />

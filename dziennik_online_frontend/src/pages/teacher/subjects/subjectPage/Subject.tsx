@@ -1,28 +1,31 @@
 // @ts-ignore
 import React, { useEffect, useState } from "react";
+import { Button } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
 import useAuth from "../../../../context/AuthContext/useAuth";
-import {
-  addGradeType,
-  getStudentsGrades,
-} from "../../../../services/teacherSubjects";
-import { Button } from "react-bootstrap";
+import { addGradeType, getStudentsGrades, } from "../../../../services/teacherSubjects";
 import { StudentsGrades } from "../../helper";
-// import AddGradeTypeForm from "../AggGradeType";
-import { Grade } from "../Grade";
 import ButtonModal from "../../statistics/ButtonModal";
 import GradeButtonModal from "../../statistics/GradeButtonModal";
-import * as Icon from "react-bootstrap-icons";
+// import AddGradeTypeForm from "../AggGradeType";
+import { Grade } from "../Grade";
 
 const Subject = (): JSX.Element => {
   const [loading, setLoading] = useState<boolean>(false);
+  const [fetchGradesAgain, setFetchGradesAgain] = useState<boolean>(false);
+
   const { subject } = useParams();
   const { user } = useAuth();
   const userGuid: string = user?.guid ?? "";
   const subjectId: number = Number(subject);
   const [gradeTypeName, setGradeTypeNameToAdd] = useState("");
   const [gradeTypWeight, setGradeTypeWeightToAdd] = useState(0);
+  const [checked, setChecked] = React.useState(false);
   const navigate = useNavigate();
+
+  const handleChange = () => {
+    setChecked(!checked);
+  };
 
   const [currentClassAndSubject, setCurrentClassAndSubject] = useState({
     className: "",
@@ -46,7 +49,7 @@ const Subject = (): JSX.Element => {
       setCurrentClassAndSubject(currentClassAndSubject);
       setStudentsGrades(classAndSubjectData);
     });
-  }, [subject]);
+  }, [subject, fetchGradesAgain]);
 
   function handleValueWeighChange(event: any) {
     setGradeTypeWeightToAdd(event.target.value);
@@ -128,7 +131,6 @@ const Subject = (): JSX.Element => {
     };
   }
 
-  console.log("gradeDetailsToAdd: ", gradeDetailsToAdd);
   return (
     <>
       <div
@@ -155,6 +157,15 @@ const Subject = (): JSX.Element => {
           >
             {currentClassAndSubject?.className}
           </span>{" "}
+        </span>
+        <span style={{float: "right"}}>
+          {" "}
+          Pokoloruj oceny
+          <input
+              type="checkbox"
+              style={{marginLeft: "10px"}}
+              checked={checked}
+              onChange={handleChange}/>
         </span>
       </div>
       <table
@@ -205,8 +216,11 @@ const Subject = (): JSX.Element => {
                             <div>
                               {userGrade.map((grade) => (
                                 <Grade
-                                  grade={grade}
-                                  gradeTypeId={item.gradeTypeId}
+                                    key={grade.userId}
+                                    grade={grade}
+                                    gradeTypeId={item.gradeTypeId}
+                                    checked={checked}
+                                    fetchedAgain={() => setFetchGradesAgain(!fetchGradesAgain)}
                                 />
                               ))}
                             </div>
@@ -215,6 +229,7 @@ const Subject = (): JSX.Element => {
                                 userId={student.id}
                                 userGuid={userGuid}
                                 gradeTypeId={item.gradeTypeId}
+                                fetchedAgain={() => setFetchGradesAgain(!fetchGradesAgain)}
                               />
                             )}
                           </div>
@@ -224,43 +239,50 @@ const Subject = (): JSX.Element => {
                   })}
                   <td className="grade-cell">
                     <input
-                      placeholder={"np. 3"}
-                      maxLength={1}
-                      style={{ width: "19%" }}
-                      onChange={handleChangeValue(student.id)}
-                    ></input>
+                        type={'number'}
+                        min={1}
+                        max={6}
+                        placeholder={"np. 3"}
+                        maxLength={1}
+                        style={{ width: "19%" }}
+                        onChange={handleChangeValue(student.id)}
+                    />
                     <input
                       placeholder={"np. ...komentarz"}
                       style={{ width: "79%", marginLeft: "5px" }}
                       onChange={handleChangeCommentaryValue(student.id)}
-                    ></input>
+                    />
                   </td>
                 </tr>
-                <tr></tr>
+                <tr/>
               </>
             );
           })}
         </tbody>
         <tfoot>
-          <tr></tr>
+          <tr />
         </tfoot>
       </table>
       <div style={{ float: "right", marginRight: "30px" }}>
         <>
+          <label>Waga</label>
+        </>
+        <>
           <input
-            style={{ margin: "10px", height: "37px" }}
-            onChange={handleValueWeighChange}
-            value={gradeTypWeight}
+              type={'number'}
+              style={{ margin: "10px", height: "37px" }}
+              onChange={handleValueWeighChange}
+              value={gradeTypWeight}
           />
         </>
         <>
-          <Button
-            style={{ margin: "10px" }}
-            variant="primary"
-            onClick={handleValueSubmit}
-          >
-            Zapisz
-          </Button>
+            <Button
+                style={{margin: "10px"}}
+                variant="primary"
+                onClick={handleValueSubmit}
+            >
+                Zapisz
+            </Button>
         </>
       </div>
     </>
