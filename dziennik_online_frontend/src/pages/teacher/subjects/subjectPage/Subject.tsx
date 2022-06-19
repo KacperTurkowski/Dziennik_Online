@@ -1,14 +1,15 @@
 // @ts-ignore
 import React, { useEffect, useState } from "react";
-import { Button } from "react-bootstrap";
+import {Button, OverlayTrigger, Popover} from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
 import useAuth from "../../../../context/AuthContext/useAuth";
 import { addGradeType, getStudentsGrades, } from "../../../../services/teacherSubjects";
-import { StudentsGrades } from "../../helper";
+import {GradeTypeWithGrades, StudentsGrades} from "../../helper";
 import ButtonModal from "../../statistics/ButtonModal";
 import GradeButtonModal from "../../statistics/GradeButtonModal";
 // import AddGradeTypeForm from "../AggGradeType";
 import { Grade } from "../Grade";
+import DeleteType from "../DeleteType";
 
 const Subject = (): JSX.Element => {
   const [loading, setLoading] = useState<boolean>(false);
@@ -21,18 +22,38 @@ const Subject = (): JSX.Element => {
   const [gradeTypeName, setGradeTypeNameToAdd] = useState("");
   const [gradeTypWeight, setGradeTypeWeightToAdd] = useState(0);
   const [checked, setChecked] = React.useState(false);
+  const [deleteShow, setDeleteType] = React.useState(false);
   const navigate = useNavigate();
 
   const handleChange = () => {
     setChecked(!checked);
   };
 
+  const handleRightClick = (event: any): void => {
+    event.preventDefault();
+    setDeleteType(true);
+  }
+
+  const renderTooltip = (gradeTypeWithGrades: GradeTypeWithGrades | undefined): JSX.Element => {
+    const weight = gradeTypeWithGrades?.weight;
+    return (
+        <Popover id={`popover-positioned-left`}>
+          <Popover.Body>
+            <>
+              <p>Waga: <br/>
+                <strong>{weight}</strong></p>
+            </>
+            <p><em>Kliknij prawym, aby usunąć</em></p>
+          </Popover.Body>
+        </Popover>
+    )
+  }
+
   const [currentClassAndSubject, setCurrentClassAndSubject] = useState({
     className: "",
     schoolSubjectName: "",
   });
   const [studentsGrades, setStudentsGrades] = useState<StudentsGrades | null>();
-
   const [gradeDetailsToAdd, setGradeDetailsToAdd] = useState<any[]>([]);
 
   useEffect(() => {
@@ -177,8 +198,24 @@ const Subject = (): JSX.Element => {
             <th>Imie i Nazwisko</th>
             {studentsGrades?.gradeTypes.map((subject) => (
               <th key={subject.gradeTypeId}>
+                <DeleteType
+                    show={deleteShow}
+                    handleHide={() => setDeleteType(false)}
+                    handleSuccess={() => window.location.reload()}
+                    gradeTypeId={subject.gradeTypeId}
+                />
                 <div className="grade-cell-heading">
-                  <span>{subject.name}</span>
+                  <OverlayTrigger
+                      overlay={renderTooltip(studentsGrades?.gradeTypeWithGrades?.find(x => x.gradeTypeId === subject.gradeTypeId))}
+                      placement={'left'}
+                      key={subject.name}
+                  >
+                    <span
+                        onContextMenu={handleRightClick}
+                    >
+                      {subject.name}
+                    </span>
+                  </OverlayTrigger>
                   <ButtonModal
                     gradeTypeId={subject.gradeTypeId}
                     userGuid={userGuid}

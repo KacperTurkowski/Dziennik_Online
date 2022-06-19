@@ -10,6 +10,7 @@ export interface StudentsGrades {
 export interface GradeTypeWithGrades {
   gradeTypeId: number;
   grades: Array<Grade>;
+  weight: number;
 }
 
 export interface Grade {
@@ -58,4 +59,11 @@ export interface DeleteGradeInterface {
   show: boolean;
   gradeId: number,
   gradeTypeId: number,
+}
+
+export interface DeleteTypeInterface {
+  handleHide: () => void;
+  handleSuccess: () => void;
+  show: boolean;
+  gradeTypeId: number
 }
