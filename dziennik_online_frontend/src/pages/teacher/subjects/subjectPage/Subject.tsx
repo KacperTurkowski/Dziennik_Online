@@ -23,6 +23,7 @@ const Subject = (): JSX.Element => {
   const [gradeTypWeight, setGradeTypeWeightToAdd] = useState(0);
   const [checked, setChecked] = React.useState(false);
   const [deleteShow, setDeleteType] = React.useState(false);
+  const [buttonDisabled, setButtonDisabled] = React.useState(true);
   const navigate = useNavigate();
 
   const handleChange = () => {
@@ -77,6 +78,12 @@ const Subject = (): JSX.Element => {
   }
 
   function handleTypeNameChange(event: any) {
+    if (event.target.value.length > 0) {
+      setButtonDisabled(false);
+    }
+    else {
+      setButtonDisabled(true);
+    }
     setGradeTypeNameToAdd(event.target.value);
   }
 
@@ -199,6 +206,7 @@ const Subject = (): JSX.Element => {
             {studentsGrades?.gradeTypes.map((subject) => (
               <th key={subject.gradeTypeId}>
                 <DeleteType
+                    key={subject.gradeTypeId}
                     show={deleteShow}
                     handleHide={() => setDeleteType(false)}
                     handleSuccess={() => window.location.reload()}
@@ -317,6 +325,7 @@ const Subject = (): JSX.Element => {
                 style={{margin: "10px"}}
                 variant="primary"
                 onClick={handleValueSubmit}
+                disabled={buttonDisabled}
             >
                 Zapisz
             </Button>

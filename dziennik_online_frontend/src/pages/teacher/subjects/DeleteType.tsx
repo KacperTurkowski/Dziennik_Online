@@ -6,7 +6,7 @@ import useAuth from "../../../context/AuthContext/useAuth";
 import {deleteType} from "../../../services/teacherSubjects";
 import {DeleteTypeInterface} from "../helper";
 
-const DeleteGrade = (props: DeleteTypeInterface) => {
+const DeleteType = (props: DeleteTypeInterface) => {
     const [loading, setLoading] = useState<boolean>(false);
     const {handleHide, show, gradeTypeId, handleSuccess} = props;
     const {user} = useAuth();
@@ -34,7 +34,6 @@ const DeleteGrade = (props: DeleteTypeInterface) => {
             <Alert variant="danger" style={{marginBottom: "0", textAlign: "center"}}>
                 <Alert.Heading>Usuń kolumnę</Alert.Heading>
                 <p> Czy napewno chcesz usunąć kolumnę?</p>
-
                 {loading && <div style={{width: '50px', height: '50px', position: 'relative', left: '45%', marginBottom: '10px'}}>
                     <Loading />
                 </div> }
@@ -46,4 +45,4 @@ const DeleteGrade = (props: DeleteTypeInterface) => {
     );
 };
 
-export default DeleteGrade;
+export default DeleteType;
