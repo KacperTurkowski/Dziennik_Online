@@ -241,8 +241,7 @@ const Subject = (): JSX.Element => {
                         style={{ listStyle: "none" }}
                         value={subject.gradeTypeId}
                       >
-                        {subject.name + " "}
-                        {"(" + subject.gradeTypeId + ")"}
+                        {subject.name}
                       </li>
                     </span>
                   </OverlayTrigger>
