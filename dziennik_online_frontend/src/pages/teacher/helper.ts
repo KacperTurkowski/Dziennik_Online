@@ -65,5 +65,5 @@ export interface DeleteTypeInterface {
   handleHide: () => void;
   handleSuccess: () => void;
   show: boolean;
-  gradeTypeId: number
+  gradeTypeId: number;
 }

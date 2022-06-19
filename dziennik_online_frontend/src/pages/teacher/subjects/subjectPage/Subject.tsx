@@ -1,10 +1,13 @@
 // @ts-ignore
 import React, { useEffect, useState } from "react";
-import {Button, OverlayTrigger, Popover} from "react-bootstrap";
+import { Button, OverlayTrigger, Popover } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
 import useAuth from "../../../../context/AuthContext/useAuth";
-import { addGradeType, getStudentsGrades, } from "../../../../services/teacherSubjects";
-import {GradeTypeWithGrades, StudentsGrades} from "../../helper";
+import {
+  addGradeType,
+  getStudentsGrades,
+} from "../../../../services/teacherSubjects";
+import { GradeTypeWithGrades, StudentsGrades } from "../../helper";
 import ButtonModal from "../../statistics/ButtonModal";
 import GradeButtonModal from "../../statistics/GradeButtonModal";
 // import AddGradeTypeForm from "../AggGradeType";
@@ -21,6 +24,7 @@ const Subject = (): JSX.Element => {
   const subjectId: number = Number(subject);
   const [gradeTypeName, setGradeTypeNameToAdd] = useState("");
   const [gradeTypWeight, setGradeTypeWeightToAdd] = useState(0);
+  const [gradeTypeIdToDelete, setgradeTypeIdToDelete] = useState(0);
   const [checked, setChecked] = React.useState(false);
   const [deleteShow, setDeleteType] = React.useState(false);
   const [buttonDisabled, setButtonDisabled] = React.useState(true);
@@ -31,24 +35,32 @@ const Subject = (): JSX.Element => {
   };
 
   const handleRightClick = (event: any): void => {
+    const gradeTypeIdToDelete = event.target.value;
     event.preventDefault();
+    setgradeTypeIdToDelete(gradeTypeIdToDelete);
     setDeleteType(true);
-  }
+  };
 
-  const renderTooltip = (gradeTypeWithGrades: GradeTypeWithGrades | undefined): JSX.Element => {
+  const renderTooltip = (
+    gradeTypeWithGrades: GradeTypeWithGrades | undefined
+  ): JSX.Element => {
     const weight = gradeTypeWithGrades?.weight;
     return (
-        <Popover id={`popover-positioned-left`}>
-          <Popover.Body>
-            <>
-              <p>Waga: <br/>
-                <strong>{weight}</strong></p>
-            </>
-            <p><em>Kliknij prawym, aby usunąć</em></p>
-          </Popover.Body>
-        </Popover>
-    )
-  }
+      <Popover id={`popover-positioned-left`}>
+        <Popover.Body>
+          <>
+            <p>
+              Waga: <br />
+              <strong>{weight}</strong>
+            </p>
+          </>
+          <p>
+            <em>Kliknij prawym, aby usunąć</em>
+          </p>
+        </Popover.Body>
+      </Popover>
+    );
+  };
 
   const [currentClassAndSubject, setCurrentClassAndSubject] = useState({
     className: "",
@@ -80,8 +92,7 @@ const Subject = (): JSX.Element => {
   function handleTypeNameChange(event: any) {
     if (event.target.value.length > 0) {
       setButtonDisabled(false);
-    }
-    else {
+    } else {
       setButtonDisabled(true);
     }
     setGradeTypeNameToAdd(event.target.value);
@@ -186,14 +197,15 @@ const Subject = (): JSX.Element => {
             {currentClassAndSubject?.className}
           </span>{" "}
         </span>
-        <span style={{float: "right"}}>
+        <span style={{ float: "right" }}>
           {" "}
           Pokoloruj oceny
           <input
-              type="checkbox"
-              style={{marginLeft: "10px"}}
-              checked={checked}
-              onChange={handleChange}/>
+            type="checkbox"
+            style={{ marginLeft: "10px" }}
+            checked={checked}
+            onChange={handleChange}
+          />
         </span>
       </div>
       <table
@@ -205,23 +217,33 @@ const Subject = (): JSX.Element => {
             <th>Imie i Nazwisko</th>
             {studentsGrades?.gradeTypes.map((subject) => (
               <th key={subject.gradeTypeId}>
-                <DeleteType
+                {subject.gradeTypeId === gradeTypeIdToDelete && (
+                  <DeleteType
                     key={subject.gradeTypeId}
                     show={deleteShow}
                     handleHide={() => setDeleteType(false)}
                     handleSuccess={() => window.location.reload()}
                     gradeTypeId={subject.gradeTypeId}
-                />
+                  />
+                )}
                 <div className="grade-cell-heading">
                   <OverlayTrigger
-                      overlay={renderTooltip(studentsGrades?.gradeTypeWithGrades?.find(x => x.gradeTypeId === subject.gradeTypeId))}
-                      placement={'left'}
-                      key={subject.name}
+                    overlay={renderTooltip(
+                      studentsGrades?.gradeTypeWithGrades?.find(
+                        (x) => x.gradeTypeId === subject.gradeTypeId
+                      )
+                    )}
+                    placement={"left"}
+                    key={subject.name}
                   >
-                    <span
-                        onContextMenu={handleRightClick}
-                    >
-                      {subject.name}
+                    <span onContextMenu={handleRightClick}>
+                      <li
+                        style={{ listStyle: "none" }}
+                        value={subject.gradeTypeId}
+                      >
+                        {subject.name + " "}
+                        {"(" + subject.gradeTypeId + ")"}
+                      </li>
                     </span>
                   </OverlayTrigger>
                   <ButtonModal
@@ -232,6 +254,7 @@ const Subject = (): JSX.Element => {
                 </div>
               </th>
             ))}
+
             <th style={{ maxWidth: "300px" }}>
               <input
                 style={{ width: "100%" }}
@@ -261,11 +284,13 @@ const Subject = (): JSX.Element => {
                             <div>
                               {userGrade.map((grade) => (
                                 <Grade
-                                    key={grade.userId}
-                                    grade={grade}
-                                    gradeTypeId={item.gradeTypeId}
-                                    checked={checked}
-                                    fetchedAgain={() => setFetchGradesAgain(!fetchGradesAgain)}
+                                  key={grade.userId}
+                                  grade={grade}
+                                  gradeTypeId={item.gradeTypeId}
+                                  checked={checked}
+                                  fetchedAgain={() =>
+                                    setFetchGradesAgain(!fetchGradesAgain)
+                                  }
                                 />
                               ))}
                             </div>
@@ -274,7 +299,9 @@ const Subject = (): JSX.Element => {
                                 userId={student.id}
                                 userGuid={userGuid}
                                 gradeTypeId={item.gradeTypeId}
-                                fetchedAgain={() => setFetchGradesAgain(!fetchGradesAgain)}
+                                fetchedAgain={() =>
+                                  setFetchGradesAgain(!fetchGradesAgain)
+                                }
                               />
                             )}
                           </div>
@@ -284,13 +311,13 @@ const Subject = (): JSX.Element => {
                   })}
                   <td className="grade-cell">
                     <input
-                        type={'number'}
-                        min={1}
-                        max={6}
-                        placeholder={"np. 3"}
-                        maxLength={1}
-                        style={{ width: "19%" }}
-                        onChange={handleChangeValue(student.id)}
+                      type={"number"}
+                      min={1}
+                      max={6}
+                      placeholder={"np. 3"}
+                      maxLength={1}
+                      style={{ width: "19%" }}
+                      onChange={handleChangeValue(student.id)}
                     />
                     <input
                       placeholder={"np. ...komentarz"}
@@ -299,7 +326,7 @@ const Subject = (): JSX.Element => {
                     />
                   </td>
                 </tr>
-                <tr/>
+                <tr />
               </>
             );
           })}
@@ -314,21 +341,21 @@ const Subject = (): JSX.Element => {
         </>
         <>
           <input
-              type={'number'}
-              style={{ margin: "10px", height: "37px" }}
-              onChange={handleValueWeighChange}
-              value={gradeTypWeight}
+            type={"number"}
+            style={{ margin: "10px", height: "37px" }}
+            onChange={handleValueWeighChange}
+            value={gradeTypWeight}
           />
         </>
         <>
-            <Button
-                style={{margin: "10px"}}
-                variant="primary"
-                onClick={handleValueSubmit}
-                disabled={buttonDisabled}
-            >
-                Zapisz
-            </Button>
+          <Button
+            style={{ margin: "10px" }}
+            variant="primary"
+            onClick={handleValueSubmit}
+            disabled={buttonDisabled}
+          >
+            Zapisz
+          </Button>
         </>
       </div>
     </>
