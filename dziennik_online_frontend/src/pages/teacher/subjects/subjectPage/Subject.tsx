@@ -334,7 +334,7 @@ const Subject = (): JSX.Element => {
       </table>
       <div style={{ float: "right", marginRight: "30px" }}>
         <>
-          <label>Waga</label>
+          <label>Waga:</label>
         </>
         <>
           <input
@@ -346,7 +346,7 @@ const Subject = (): JSX.Element => {
         </>
         <>
           <Button
-            style={{ margin: "10px" }}
+            style={{ margin: "10px", borderRadius: "4px" }}
             variant="primary"
             onClick={handleValueSubmit}
             disabled={buttonDisabled}
