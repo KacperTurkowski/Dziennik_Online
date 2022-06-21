@@ -37,16 +37,16 @@ export const getStudentAllGrades = async (subjectId: number, uuid: string): Prom
         return await Promise.all(responseGradesData.map(async (grade: any) => {
             const {gradeId, gradeTypeId} = grade;
 
-            const avgData = await getStudentAverageForGrade(gradeTypeId, uuid);
             if (gradeId > 0) {
-                const gradeSpecific = await getStudentGradeSpecificInformation(gradeId, uuid);
+                const [avgData, gradeInformation] = await Promise.all([getStudentAverageForGrade(gradeTypeId, uuid), getStudentGradeSpecificInformation(gradeId, uuid)])
                 return {
                     ...grade,
                     ...avgData,
-                    gradeData: gradeSpecific
+                    gradeData: gradeInformation
                 }
             }
 
+            const avgData = await getStudentAverageForGrade(gradeTypeId, uuid);
             return {
                 ...grade,
                 ...avgData,
