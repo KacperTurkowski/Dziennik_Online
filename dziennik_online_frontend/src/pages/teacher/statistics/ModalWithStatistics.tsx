@@ -22,7 +22,9 @@ const ModalWithStatistics = (props: IModalWithStatistics) => {
         />
       </Modal.Body>
       <Modal.Footer>
-        <Button onClick={onHide}>Zamknij</Button>
+        <Button style={{ borderRadius: "4px" }} onClick={onHide}>
+          Zamknij
+        </Button>
       </Modal.Footer>
     </Modal>
   );

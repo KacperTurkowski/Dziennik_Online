@@ -14,11 +14,11 @@ const ButtonModal = (props: IButtonModalProps) => {
   return (
     <span>
       <Button
-        style={{ marginRight: "10px" }}
+        style={{ borderRadius: "5px" }}
         variant="primary"
         onClick={() => setModalShow(true)}
       >
-       {<Icon.BarChartFill/>}
+        {<Icon.BarChartFill />}
       </Button>
       <ModalWithStatistics
         gradeTypeName={gradeTypeName}
