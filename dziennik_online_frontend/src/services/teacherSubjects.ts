@@ -184,6 +184,24 @@ export const deleteGrade = async (userGuid: string, subjectId: number, gradeType
     }
 };
 
+export const deleteType = async (userGuid: string, subjectId: number, gradeTypeId: number) => {
+    try {
+        const response = await axios.delete(
+            `${API_URL}/teacher/grades/DeleteGradeType`,
+            {
+                data: {
+                    userGuid,
+                    subjectId,
+                    gradeTypeId
+                },
+            }
+        );
+        return response.data;
+    } catch (e) {
+        throw e;
+    }
+};
+
 export const deleteGradeType = async (
   userGuid: string,
   subjectId: number,

@@ -1,140 +1,173 @@
 // @ts-ignore
 import React, { useEffect, useState } from "react";
-import { Button } from "react-bootstrap";
+import { Button, OverlayTrigger, Popover } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
 import useAuth from "../../../../context/AuthContext/useAuth";
-import {
-  addGradeType,
-  getStudentsGrades,
-} from "../../../../services/teacherSubjects";
-import { StudentsGrades } from "../../helper";
+import { addGradeType, getStudentsGrades, } from "../../../../services/teacherSubjects";
+import { GradeTypeWithGrades, StudentsGrades } from "../../helper";
 import ButtonModal from "../../statistics/ButtonModal";
 import GradeButtonModal from "../../statistics/GradeButtonModal";
+import DeleteType from "../DeleteType";
 // import AddGradeTypeForm from "../AggGradeType";
 import { Grade } from "../Grade";
 
 const Subject = (): JSX.Element => {
-  const [loading, setLoading] = useState<boolean>(false);
-  const [fetchGradesAgain, setFetchGradesAgain] = useState<boolean>(false);
+    const [loading, setLoading] = useState<boolean>(false);
+    const [fetchGradesAgain, setFetchGradesAgain] = useState<boolean>(false);
 
-  const { subject } = useParams();
-  const { user } = useAuth();
-  const userGuid: string = user?.guid ?? "";
-  const subjectId: number = Number(subject);
-  const [gradeTypeName, setGradeTypeNameToAdd] = useState("");
-  const [gradeTypWeight, setGradeTypeWeightToAdd] = useState(0);
-  const [checked, setChecked] = React.useState(false);
-  const navigate = useNavigate();
+    const {subject} = useParams();
+    const {user} = useAuth();
+    const userGuid: string = user?.guid ?? "";
+    const subjectId: number = Number(subject);
+    const [gradeTypeName, setGradeTypeNameToAdd] = useState("");
+    const [gradeTypWeight, setGradeTypeWeightToAdd] = useState(0);
+    const [gradeTypeIdToDelete, setGradeTypeIdToDelete] = useState(0);
+    const [checked, setChecked] = React.useState(false);
+    const [deleteShow, setDeleteType] = React.useState(false);
+    const [buttonDisabled, setButtonDisabled] = React.useState(true);
+    const navigate = useNavigate();
 
-  const handleChange = () => {
-    setChecked(!checked);
-  };
+    const handleChange = () => {
+        setChecked(!checked);
+    };
 
-  const [currentClassAndSubject, setCurrentClassAndSubject] = useState({
-    className: "",
-    schoolSubjectName: "",
-  });
-  const [studentsGrades, setStudentsGrades] = useState<StudentsGrades | null>();
+    const handleRightClick = (event: any): void => {
+        const gradeTypeIdToDelete = event.target.value;
+        event.preventDefault();
+        setGradeTypeIdToDelete(gradeTypeIdToDelete);
+        setDeleteType(true);
+    };
 
-  const [gradeDetailsToAdd, setGradeDetailsToAdd] = useState<any[]>([]);
+    const renderTooltip = (
+        gradeTypeWithGrades: GradeTypeWithGrades|undefined
+    ): JSX.Element => {
+        const weight = gradeTypeWithGrades?.weight;
+        return (
+            <Popover id={`popover-positioned-left`}>
+                <Popover.Body>
+                    <>
+                        <p>
+                            Waga: <br/>
+                            <strong>{weight}</strong>
+                        </p>
+                    </>
+                    <p>
+                        <em>Kliknij prawym, aby usunąć</em>
+                    </p>
+                </Popover.Body>
+            </Popover>
+        );
+    };
 
-  useEffect(() => {
-    setStudentsGrades(null);
-    setCurrentClassAndSubject({ className: "", schoolSubjectName: "" });
-
-    getStudentsGrades(userGuid, subjectId).then((classAndSubjectData) => {
-      const currentClassAndSubject = () => {
-        return {
-          className: classAndSubjectData.subject.className,
-          schoolSubjectName: classAndSubjectData.subject.schoolSubjectName,
-        };
-      };
-      setCurrentClassAndSubject(currentClassAndSubject);
-      setStudentsGrades(classAndSubjectData);
+    const [currentClassAndSubject, setCurrentClassAndSubject] = useState({
+        className: "",
+        schoolSubjectName: "",
     });
-  }, [subject, fetchGradesAgain]);
+    const [studentsGrades, setStudentsGrades] = useState<StudentsGrades|null>();
+    const [gradeDetailsToAdd, setGradeDetailsToAdd] = useState<any[]>([]);
 
-  function handleValueWeighChange(event: any) {
-    setGradeTypeWeightToAdd(event.target.value);
-  }
+    useEffect(() => {
+        setStudentsGrades(null);
+        setCurrentClassAndSubject({className: "", schoolSubjectName: ""});
 
-  function handleTypeNameChange(event: any) {
-    setGradeTypeNameToAdd(event.target.value);
-  }
+        getStudentsGrades(userGuid, subjectId).then((classAndSubjectData) => {
+            const currentClassAndSubject = () => {
+                return {
+                    className: classAndSubjectData.subject.className,
+                    schoolSubjectName: classAndSubjectData.subject.schoolSubjectName,
+                };
+            };
+            setCurrentClassAndSubject(currentClassAndSubject);
+            setStudentsGrades(classAndSubjectData);
+        });
+    }, [subject, fetchGradesAgain]);
 
-  const handleValueSubmit = async (event: any): Promise<void> => {
-    event.preventDefault();
-    try {
-      await addGradeType(
-        gradeTypeName,
-        gradeTypWeight,
-        userGuid,
-        subjectId,
-        gradeDetailsToAdd
-      );
-      navigate(0);
-    } catch (e) {
-      console.log(e);
-    } finally {
-      setLoading(false);
+    function handleValueWeighChange(event: any) {
+        setGradeTypeWeightToAdd(event.target.value);
     }
-  };
 
-  function handleChangeValue(userId: number) {
-    return (event: any) => {
-      const stateCopy = JSON.parse(JSON.stringify(gradeDetailsToAdd));
-      const studentObject = stateCopy.find(
-        (el: any) => el.studentId === userId
-      );
-      const studentObjectIndex = stateCopy.findIndex(
-        (el: any) => el.studentId === userId
-      );
-      if (studentObjectIndex > -1) {
-        stateCopy.splice(studentObjectIndex, 1);
-      }
-      if (studentObject) {
-        studentObject.value = Number(event.target.value);
-        setGradeDetailsToAdd([...stateCopy, studentObject]);
-      }
-      if (typeof studentObject === "undefined") {
-        const objectToPush = {
-          commentary: "",
-          value: +event.target.value,
-          studentId: userId,
-        };
-        setGradeDetailsToAdd([...stateCopy, objectToPush]);
-      }
+    function handleTypeNameChange(event: any) {
+        if ( event.target.value.length > 0 ) {
+            setButtonDisabled(false);
+        } else {
+            setButtonDisabled(true);
+        }
+        setGradeTypeNameToAdd(event.target.value);
+    }
+
+    const handleValueSubmit = async (event: any): Promise<void> => {
+        event.preventDefault();
+        try {
+            await addGradeType(
+                gradeTypeName,
+                gradeTypWeight,
+                userGuid,
+                subjectId,
+                gradeDetailsToAdd
+            );
+            setFetchGradesAgain(!fetchGradesAgain);
+        } catch (e) {
+            console.log(e);
+        } finally {
+            setLoading(false);
+        }
     };
-  }
 
-  function handleChangeCommentaryValue(userId: number) {
-    return (event: any) => {
-      const stateCopy = JSON.parse(JSON.stringify(gradeDetailsToAdd));
-      const studentObject = stateCopy.find(
-        (el: any) => el.studentId === userId
-      );
-      const studentObjectIndex = stateCopy.findIndex(
-        (el: any) => el.studentId === userId
-      );
-      if (studentObjectIndex > -1) {
-        stateCopy.splice(studentObjectIndex, 1);
-      }
-      if (studentObject) {
-        studentObject.commentary = event.target.value;
-        setGradeDetailsToAdd([...stateCopy, studentObject]);
-      }
-      if (typeof studentObject === "undefined") {
-        const objectToPush = {
-          commentary: event.target.value,
-          value: undefined,
-          studentId: userId,
+    function handleChangeValue(userId: number) {
+        return (event: any) => {
+            const stateCopy = JSON.parse(JSON.stringify(gradeDetailsToAdd));
+            const studentObject = stateCopy.find(
+                (el: any) => el.studentId === userId
+            );
+            const studentObjectIndex = stateCopy.findIndex(
+                (el: any) => el.studentId === userId
+            );
+            if ( studentObjectIndex > -1 ) {
+                stateCopy.splice(studentObjectIndex, 1);
+            }
+            if ( studentObject ) {
+                studentObject.value = Number(event.target.value); //  studentObject.commentary
+                setGradeDetailsToAdd([...stateCopy, studentObject]);
+            }
+            if ( typeof studentObject === "undefined" ) {
+                const objectToPush = {
+                    commentary: "",
+                    value: +event.target.value,
+                    studentId: userId,
+                };
+                setGradeDetailsToAdd([...stateCopy, objectToPush]);
+            }
         };
-        setGradeDetailsToAdd([...stateCopy, objectToPush]);
-      }
-    };
-  }
+    }
 
-  return (
+    function handleChangeCommentaryValue(userId: number) {
+        return (event: any) => {
+            const stateCopy = JSON.parse(JSON.stringify(gradeDetailsToAdd));
+            const studentObject = stateCopy.find(
+                (el: any) => el.studentId === userId
+            );
+            const studentObjectIndex = stateCopy.findIndex(
+                (el: any) => el.studentId === userId
+            );
+            if ( studentObjectIndex > -1 ) {
+                stateCopy.splice(studentObjectIndex, 1);
+            }
+            if ( studentObject ) {
+                studentObject.commentary = event.target.value; //  studentObject.commentary
+                setGradeDetailsToAdd([...stateCopy, studentObject]);
+            }
+            if ( typeof studentObject === "undefined" ) {
+                const objectToPush = {
+                    commentary: event.target.value,
+                    value: undefined,
+                    studentId: userId,
+                };
+                setGradeDetailsToAdd([...stateCopy, objectToPush]);
+            }
+        };
+    }
+
+    return (
     <>
       <div
         style={{
@@ -181,8 +214,35 @@ const Subject = (): JSX.Element => {
             <th>Imie i Nazwisko</th>
             {studentsGrades?.gradeTypes.map((subject) => (
               <th key={subject.gradeTypeId}>
+                {subject.gradeTypeId === gradeTypeIdToDelete && (
+                  <DeleteType
+                    key={subject.gradeTypeId}
+                    show={deleteShow}
+                    handleHide={() => setDeleteType(false)}
+                    handleSuccess={() =>
+                        setFetchGradesAgain(!fetchGradesAgain)}
+                    gradeTypeId={subject.gradeTypeId}
+                  />
+                )}
                 <div className="grade-cell-heading">
-                  <span>{subject.name}</span>
+                  <OverlayTrigger
+                    overlay={renderTooltip(
+                      studentsGrades?.gradeTypeWithGrades?.find(
+                        (x) => x.gradeTypeId === subject.gradeTypeId
+                      )
+                    )}
+                    placement={"left"}
+                    key={subject.name}
+                  >
+                    <span onContextMenu={handleRightClick}>
+                      <li
+                        style={{ listStyle: "none", cursor: 'pointer' }}
+                        value={subject.gradeTypeId}
+                      >
+                        {subject.name}
+                      </li>
+                    </span>
+                  </OverlayTrigger>
                   <ButtonModal
                     gradeTypeId={subject.gradeTypeId}
                     userGuid={userGuid}
@@ -191,6 +251,7 @@ const Subject = (): JSX.Element => {
                 </div>
               </th>
             ))}
+
             <th style={{ maxWidth: "300px" }}>
               <input
                 style={{ width: "100%" }}
@@ -288,6 +349,7 @@ const Subject = (): JSX.Element => {
             style={{ margin: "10px", borderRadius: "4px" }}
             variant="primary"
             onClick={handleValueSubmit}
+            disabled={buttonDisabled}
           >
             Zapisz
           </Button>
