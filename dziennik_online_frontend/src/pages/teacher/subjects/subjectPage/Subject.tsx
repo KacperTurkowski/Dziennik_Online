@@ -105,6 +105,9 @@ const Subject = (): JSX.Element => {
                 subjectId,
                 gradeDetailsToAdd
             );
+            setGradeTypeNameToAdd("");
+            setGradeTypeWeightToAdd(0);
+            setGradeDetailsToAdd([]);
             setFetchGradesAgain(!fetchGradesAgain);
         } catch (e) {
             console.log(e);
