@@ -18,7 +18,7 @@ export const Subject = (): JSX.Element => {
     const {user} = useAuth();
     const navigate = useNavigate()
     const {actualSubject, setActualSubject} = useStudent();
-    const [grades, setGrades] = useState<any[]>([]);
+    const [grades, setGrades] = useState<any[] | null>(null);
     const [avgGrade, setAvgGrade] = useState<number | null>(null);
     const [modalShow, setModalShow] = useState(false);
     const [activeGradeId, setActiveGradeId] = useState<number>(0);
@@ -50,7 +50,7 @@ export const Subject = (): JSX.Element => {
             <Row className={'student-grades-row'}>
                 <Col md={10}>
                     <Widget header={'Twoje oceny'} icon={<Icon.MortarboardFill/>}>
-                        {grades.length > 0 ?
+                        {grades != null && grades.length > 0 ?
                             <Table className={'student-grades-table'}>
                                 <thead>
                                 <tr>
@@ -77,7 +77,7 @@ export const Subject = (): JSX.Element => {
                                     </tr>
                                 )}
                                 </tbody>
-                            </Table> : <Loader/>}
+                            </Table> :  grades == null ? <Loader/> : <div>Brak ocen</div>}
                     </Widget>
                 </Col>
                 <Col md={2} className={'student-average'}>
